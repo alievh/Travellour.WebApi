@@ -1,0 +1,5 @@
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.csproj.AssemblyReference.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.AssemblyInfoInputs.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.AssemblyInfo.cs
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.csproj.CoreCompileInputs.cache
