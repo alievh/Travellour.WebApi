@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 
@@ -21,9 +22,10 @@ public class UnitOfWorkService : IUnitOfWorkService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public UnitOfWorkService(IUnitOfWork unitOfWork)
+    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 

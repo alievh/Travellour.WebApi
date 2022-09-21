@@ -1,6 +1,11 @@
-﻿namespace Travellour.Data;
+﻿using Travellour.Core;
+using Travellour.Core.Interfaces;
+using Travellour.Data.DAL;
+using Travellour.Data.Implementations;
 
-public class UnitOfWork
+namespace Travellour.Data;
+
+public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
     private IUserRepository _userRepository;

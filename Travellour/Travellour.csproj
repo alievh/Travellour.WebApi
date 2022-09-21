@@ -17,10 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Travellour.Business\Travellour.Business.csproj" />
     <ProjectReference Include="..\Travellour.Core\Travellour.Core.csproj" />
     <ProjectReference Include="..\Travellour.Data\Travellour.Data.csproj" />
   </ItemGroup>

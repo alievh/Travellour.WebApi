@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,7 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\Travellour.Core\Travellour.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\Comment\" />
+    <Folder Include="DTOs\Event\" />
+    <Folder Include="DTOs\Forum\" />
+    <Folder Include="DTOs\Friend\" />
+    <Folder Include="DTOs\Group\" />
+    <Folder Include="DTOs\Like\" />
+    <Folder Include="DTOs\Notification\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
   </ItemGroup>
 
 </Project>

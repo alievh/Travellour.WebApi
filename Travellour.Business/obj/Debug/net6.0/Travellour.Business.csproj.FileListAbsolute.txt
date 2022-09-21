@@ -3,3 +3,13 @@ C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.AssemblyInfoInputs.cache
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.AssemblyInfo.cs
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.csproj.CoreCompileInputs.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\bin\Debug\net6.0\Travellour.Business.deps.json
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\bin\Debug\net6.0\Travellour.Business.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\bin\Debug\net6.0\Travellour.Business.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\bin\Debug\net6.0\Travellour.Core.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\bin\Debug\net6.0\Travellour.Core.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.csproj.CopyComplete
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\refint\Travellour.Business.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\Travellour.Business.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Business\obj\Debug\net6.0\ref\Travellour.Business.dll

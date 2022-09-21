@@ -58,7 +58,6 @@ C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Tr
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.AssemblyInfoInputs.cache
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.AssemblyInfo.cs
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.csproj.CoreCompileInputs.cache
-C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\staticwebassets.build.json
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\staticwebassets.development.json
@@ -69,3 +68,9 @@ C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\re
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.pdb
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.genruntimeconfig.cache
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\ref\Travellour.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Travellour.Business.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Travellour.Business.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\obj\Debug\net6.0\Travellour.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

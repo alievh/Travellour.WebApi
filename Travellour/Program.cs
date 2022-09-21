@@ -1,6 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Travellour.Business.Implementations;
+using Travellour.Business.Interfaces;
+using Travellour.Business.Profiles;
+using Travellour.Business.Token.Implementations;
+using Travellour.Business.Token.Interfaces;
+using Travellour.Core;
 using Travellour.Core.Entities;
+using Travellour.Data;
 using Travellour.Data.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +18,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigins",
+        builder => builder.WithOrigins("http://localhost:3000").WithMethods("PUT", "DELETE", "GET"));
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -35,7 +48,22 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.SignIn.RequireConfirmedEmail = true;
 });
 
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddMapperService();
+
+builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 var app = builder.Build();
+
+app.UseCors(x => x
+    .WithOrigins("http://localhost:3000")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .SetIsOriginAllowed(origin => true)
+);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
