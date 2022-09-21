@@ -1,0 +1,12 @@
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\bin\Debug\net6.0\Travellour.Core.deps.json
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\bin\Debug\net6.0\Travellour.Core.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\bin\Debug\net6.0\Travellour.Core.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.csproj.AssemblyReference.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.AssemblyInfoInputs.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.AssemblyInfo.cs
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.csproj.CoreCompileInputs.cache
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\refint\Travellour.Core.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\Travellour.Core.pdb
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour.Core\obj\Debug\net6.0\ref\Travellour.Core.dll

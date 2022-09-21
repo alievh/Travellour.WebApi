@@ -5,6 +5,12 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Travellour", "Travellour\Travellour.csproj", "{58402536-B8BC-4BE1-ACD1-3754DF3EA256}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Travellour.Core", "Travellour.Core\Travellour.Core.csproj", "{70ACD632-C07C-4AC2-A0C1-2BAFA13B1241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Travellour.Data", "Travellour.Data\Travellour.Data.csproj", "{E0ACF59E-44D0-4C02-ABC3-64A183F788FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Travellour.Business", "Travellour.Business\Travellour.Business.csproj", "{13300AE3-E7F2-4F57-8900-0B9E9A1184DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{58402536-B8BC-4BE1-ACD1-3754DF3EA256}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58402536-B8BC-4BE1-ACD1-3754DF3EA256}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58402536-B8BC-4BE1-ACD1-3754DF3EA256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70ACD632-C07C-4AC2-A0C1-2BAFA13B1241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70ACD632-C07C-4AC2-A0C1-2BAFA13B1241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70ACD632-C07C-4AC2-A0C1-2BAFA13B1241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70ACD632-C07C-4AC2-A0C1-2BAFA13B1241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0ACF59E-44D0-4C02-ABC3-64A183F788FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0ACF59E-44D0-4C02-ABC3-64A183F788FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0ACF59E-44D0-4C02-ABC3-64A183F788FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0ACF59E-44D0-4C02-ABC3-64A183F788FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13300AE3-E7F2-4F57-8900-0B9E9A1184DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13300AE3-E7F2-4F57-8900-0B9E9A1184DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13300AE3-E7F2-4F57-8900-0B9E9A1184DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13300AE3-E7F2-4F57-8900-0B9E9A1184DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
