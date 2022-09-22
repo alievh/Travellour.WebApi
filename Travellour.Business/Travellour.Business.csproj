@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Comment\" />
-    <Folder Include="DTOs\Event\" />
-    <Folder Include="DTOs\Forum\" />
     <Folder Include="DTOs\Friend\" />
     <Folder Include="DTOs\Group\" />
     <Folder Include="DTOs\Like\" />

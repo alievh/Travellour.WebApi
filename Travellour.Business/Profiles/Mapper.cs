@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Travellour.Business.DTOs.Post;
 using Travellour.Business.DTOs.User;
 using Travellour.Core.Entities;
 
@@ -10,5 +11,7 @@ public class Mapper : Profile
     {
         CreateMap<AppUser, UserGetDto>()
             .ForMember(c => c.ProfileImage, c => c.Ignore());
+        CreateMap<Post, PostGetDto>();
+        CreateMap<PostCreateDto, Post>();
     }
 }

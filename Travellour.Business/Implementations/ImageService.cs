@@ -4,4 +4,5 @@ namespace Travellour.Business.Implementations;
 
 public class ImageService : IImageService
 {
+
 }

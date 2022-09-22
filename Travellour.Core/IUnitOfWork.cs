@@ -5,6 +5,7 @@ namespace Travellour.Core;
 public interface IUnitOfWork
 {
     IUserRepository UserRepository { get; }
+    IEventRepository EventRepository { get; }
     ICommentRepository CommentRepository { get; }
     IForumRepository ForumRepository { get; }
     IFriendRepository FriendRepository { get; }

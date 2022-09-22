@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Travellour.Data\Travellour.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
 </Project>

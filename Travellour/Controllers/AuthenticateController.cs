@@ -70,6 +70,7 @@ namespace Travellour.Controllers
                 Username = login.Username,
                 Email = user.Email,
             };
+
             return Ok(new
             {
                 token = jwtToken,

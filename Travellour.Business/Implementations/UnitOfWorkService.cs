@@ -7,7 +7,7 @@ namespace Travellour.Business.Implementations;
 
 public class UnitOfWorkService : IUnitOfWorkService
 {
-    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private IUserService _userService;
     private ICommentService _commentService;
     private IEventService _eventService;
@@ -21,19 +21,21 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper)
+    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
-    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public IUserService UserService => _userService ??= new UserService(_unitOfWork, _mapper);
+    public IUserService UserService => _userService ??= new UserService(_unitOfWork, _mapper, _httpContextAccessor);
 
     public ICommentService CommentService => _commentService ??= new CommentService();
 
-    public IForumService ForumService => _forumService ??= new ForumService();
+    public IForumService ForumService => _forumService ??= new ForumService(_unitOfWork, _mapper);
 
     public IFriendService FriendService => _friendService ??= new FriendService();
 
@@ -45,7 +47,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public INotificationService NotificationService => _notificationService ??= new NotificationService();
 
-    public IPostService PostService => _postService ??= new PostService();
+    public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper);
 
-    public IEventService EventService => _eventService ??= new EventService();
+    public IEventService EventService => _eventService ??= new EventService(_unitOfWork, _mapper);
 }

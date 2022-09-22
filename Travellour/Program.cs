@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Travellour.Business.Implementations;
 using Travellour.Business.Interfaces;
 using Travellour.Business.Profiles;
@@ -54,6 +55,9 @@ builder.Services.AddMapperService();
 builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 app.UseCors(x => x
@@ -65,12 +69,20 @@ app.UseCors(x => x
 );
 
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "images")),
+    RequestPath = "/img"
+});
 
 app.UseHttpsRedirection();
 
