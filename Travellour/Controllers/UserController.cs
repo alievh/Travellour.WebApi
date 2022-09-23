@@ -6,6 +6,7 @@ using Travellour.Business.Interfaces;
 
 namespace Travellour.Controllers;
 
+[Authorize(AuthenticationSchemes = "Bearer")]
 [Route("api/[controller]")]
 [ApiController]
 public class UserController : Controller

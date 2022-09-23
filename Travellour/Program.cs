@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Travellour.Business.Implementations;
 using Travellour.Business.Interfaces;
 using Travellour.Business.Profiles;
@@ -20,10 +23,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigins",
         builder => builder.WithOrigins("http://localhost:3000").WithMethods("PUT", "DELETE", "GET"));
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidAudience = builder.Configuration.GetSection("Jwt:audience").Value,
+        ValidIssuer = builder.Configuration.GetSection("Jwt:issuer").Value,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:securityKey").Value)),
+    };
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -85,6 +104,8 @@ app.UseStaticFiles(new StaticFileOptions()
 });
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
