@@ -36,6 +36,7 @@ public class UserService : IUserService
         return userDto;
     }
 
+
     public async Task UpdateAsync(UserUpdateDto userUpdateDto)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -43,9 +44,31 @@ public class UserService : IUserService
         if (appUser is null) throw new NullReferenceException();
         AppUser checkUsername = await _unitOfWork.UserRepository.GetAsync(u => u.UserName == userUpdateDto.Username);
         if (checkUsername is not null) throw new ArgumentException();
-        appUser.Firstname = userUpdateDto.Firstname is not null || userUpdateDto.Firstname?.Trim() != "" ? userUpdateDto.Firstname : appUser.Firstname;
-        appUser.Lastname = userUpdateDto.Lastname is not null || userUpdateDto.Lastname?.Trim() != "" ? userUpdateDto.Lastname : appUser.Lastname;
-        appUser.UserName = userUpdateDto.Username is not null || userUpdateDto.Username?.Trim() != "" ? userUpdateDto.Username : appUser.UserName;
+
+        if (userUpdateDto.Firstname is not null && userUpdateDto.Firstname?.Trim() != "")
+        {
+            appUser.Firstname = userUpdateDto.Firstname?.Trim();
+        }
+
+        if (userUpdateDto.Lastname is not null && userUpdateDto.Lastname?.Trim() != "")
+        {
+            appUser.Lastname = userUpdateDto.Lastname?.Trim();
+        }
+
+        if (userUpdateDto.Username is not null && userUpdateDto.Username?.Trim() != "")
+        {
+            appUser.UserName = userUpdateDto.Username?.Trim();
+        }
+
         await _unitOfWork.UserRepository.UpdateAsync(appUser);
+    }
+
+    public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        List<AppUser> appUsers = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, includes: "ProfileImage");
+        if (appUsers is null) throw new NullReferenceException();
+        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(appUsers);
+        return friendSuggestionDtos;
     }
 }

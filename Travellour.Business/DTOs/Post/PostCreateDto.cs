@@ -1,10 +1,10 @@
-﻿using Travellour.Core.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using Travellour.Core.Entities;
 
 namespace Travellour.Business.DTOs.Post;
 
 public class PostCreateDto
 {
     public string? Content { get; set; }
-    public string? UserId { get; set; }
-    public ICollection<Image>? Images { get; set; }
+    public List<IFormFile>? ImageFiles { get; set; }
 }

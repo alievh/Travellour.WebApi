@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Travellour.Business.DTOs.Post;
 using Travellour.Business.DTOs.StatusCode;
 using Travellour.Business.Interfaces;
 
 namespace Travellour.Controllers;
 
+[Authorize(AuthenticationSchemes = "Bearer")]
 [Route("api/[controller]")]
 [ApiController]
 public class PostController : Controller

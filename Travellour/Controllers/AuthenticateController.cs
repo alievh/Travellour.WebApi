@@ -43,7 +43,8 @@ namespace Travellour.Controllers
                 UserName = register.Username,
                 Gender = register.Gender,
                 Birthday = register.Birthday,
-                RegisterDate = DateTime.UtcNow.AddHours(4)
+                RegisterDate = DateTime.UtcNow.AddHours(4),
+                ImageId = 2
             };
             IdentityResult result = await _userManager.CreateAsync(user, register.Password);
             if (!result.Succeeded)

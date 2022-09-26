@@ -47,7 +47,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public INotificationService NotificationService => _notificationService ??= new NotificationService();
 
-    public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper);
+    public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper, _httpContextAccessor);
 
     public IEventService EventService => _eventService ??= new EventService(_unitOfWork, _mapper);
 }

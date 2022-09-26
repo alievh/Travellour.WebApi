@@ -11,6 +11,7 @@ public class Mapper : Profile
     {
         CreateMap<AppUser, UserGetDto>()
             .ForMember(c => c.ProfileImage, c => c.Ignore());
+        CreateMap<AppUser, FriendSuggestionDto>();
         CreateMap<Post, PostGetDto>();
         CreateMap<PostCreateDto, Post>();
     }

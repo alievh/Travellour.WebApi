@@ -46,4 +46,17 @@ public class UserController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpGet("friendSuggestion")]
+    public async Task<ActionResult> GetFriendSuggestionAsync()
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.UserService.GetFriendSuggestionAsync());
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }
