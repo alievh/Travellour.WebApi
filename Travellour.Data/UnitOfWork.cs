@@ -44,4 +44,8 @@ public class UnitOfWork : IUnitOfWork
     public INotificationRepository NotificationRepository => _notificationRepository ??= new NotificationRepository(_context);
 
     public IPostRepository PostRepository => _postRepository ??= new PostRepository(_context);
+    public async Task SaveAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 }

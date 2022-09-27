@@ -11,8 +11,10 @@ public class AppUser : IdentityUser, IEntity
     public DateTime Birthday { get; set; }
     public DateTime RegisterDate { get; set; }
     public Gender Gender { get; set; }
-    public int? ImageId { get; set; }
+    public int? ProfileImageId { get; set; }
     public Image? ProfileImage { get; set; }
+    public int? CoverImageId { get; set; }
+    public Image? CoverImage { get; set; }
     public ICollection<AppUser>? Friends { get; set; }
     public ICollection<Post>? Posts { get; set; }
     public ICollection<Notification>? Notifications { get; set; }

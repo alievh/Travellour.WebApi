@@ -45,15 +45,16 @@ public class PostController : Controller
     }
 
     [HttpPost("PostCreate")]
-    public async Task PostCreateAsync(PostCreateDto postCreateDto)
+    public async Task<ActionResult> PostCreateAsync([FromForm] PostCreateDto postCreateDto)
     {
         try
         {
             await _unitOfWorkService.PostService.CreateAsync(postCreateDto);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new ArgumentNullException();
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
 }

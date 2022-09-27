@@ -10,7 +10,8 @@ public class Mapper : Profile
     public Mapper()
     {
         CreateMap<AppUser, UserGetDto>()
-            .ForMember(c => c.ProfileImage, c => c.Ignore());
+            .ForMember(c => c.ProfileImage, c => c.Ignore())
+            .ForMember(c => c.CoverImage, c => c.Ignore());
         CreateMap<AppUser, FriendSuggestionDto>();
         CreateMap<Post, PostGetDto>();
         CreateMap<PostCreateDto, Post>();

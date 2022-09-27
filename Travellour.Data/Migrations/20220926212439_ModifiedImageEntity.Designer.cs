@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220926212439_ModifiedImageEntity")]
+    partial class ModifiedImageEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,9 +175,6 @@ namespace Travellour.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CoverImageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -193,6 +192,9 @@ namespace Travellour.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<string>("Lastname")
@@ -221,9 +223,6 @@ namespace Travellour.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfileImageId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
 
@@ -241,11 +240,11 @@ namespace Travellour.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("CoverImageId");
-
                     b.HasIndex("EventId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -254,8 +253,6 @@ namespace Travellour.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProfileImageId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -425,6 +422,12 @@ namespace Travellour.Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCoverImage")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProfileImage")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
@@ -619,10 +622,6 @@ namespace Travellour.Data.Migrations
                         .WithMany("Friends")
                         .HasForeignKey("AppUserId");
 
-                    b.HasOne("Travellour.Core.Entities.Image", "CoverImage")
-                        .WithMany()
-                        .HasForeignKey("CoverImageId");
-
                     b.HasOne("Travellour.Core.Entities.Event", null)
                         .WithMany("EventMembers")
                         .HasForeignKey("EventId");
@@ -633,9 +632,7 @@ namespace Travellour.Data.Migrations
 
                     b.HasOne("Travellour.Core.Entities.Image", "ProfileImage")
                         .WithMany()
-                        .HasForeignKey("ProfileImageId");
-
-                    b.Navigation("CoverImage");
+                        .HasForeignKey("ImageId");
 
                     b.Navigation("ProfileImage");
                 });

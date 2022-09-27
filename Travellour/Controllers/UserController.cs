@@ -47,6 +47,38 @@ public class UserController : Controller
         }
     }
 
+    [HttpPost("changeProfilePhoto")]
+    public async Task<ActionResult> ChangeProfilePhoto([FromForm] ProfilePhotoDto profilePhotoDto)
+    {
+        try
+        {
+        #pragma warning disable CS8604 // Possible null reference argument.
+            await _unitOfWorkService.UserService.ChangeProfilePhotoAsync(profilePhotoDto);
+        #pragma warning restore CS8604 // Possible null reference argument.
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("changeCoverPhoto")]
+    public async Task<ActionResult> ChangeCoverPhoto([FromForm] CoverPhotoDto coverPhotoDto)
+    {
+        try
+        {
+        #pragma warning disable CS8604 // Possible null reference argument.
+            await _unitOfWorkService.UserService.ChangeCoverPhotoAsync(coverPhotoDto);
+        #pragma warning restore CS8604 // Possible null reference argument.
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
     [HttpGet("friendSuggestion")]
     public async Task<ActionResult> GetFriendSuggestionAsync()
     {
