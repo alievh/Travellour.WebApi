@@ -57,4 +57,18 @@ public class PostController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPost("PostDelete")]
+    public async Task<ActionResult> PostDeleteAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.PostService.DeleteAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Post deleted succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

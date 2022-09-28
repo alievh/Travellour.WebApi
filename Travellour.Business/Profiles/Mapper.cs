@@ -13,7 +13,8 @@ public class Mapper : Profile
             .ForMember(c => c.ProfileImage, c => c.Ignore())
             .ForMember(c => c.CoverImage, c => c.Ignore());
         CreateMap<AppUser, FriendSuggestionDto>();
-        CreateMap<Post, PostGetDto>();
+        CreateMap<Post, PostGetDto>()
+            .ForMember(c => c.ImageUrls, c => c.Ignore());
         CreateMap<PostCreateDto, Post>();
     }
 }

@@ -36,9 +36,7 @@ public class UserController : Controller
     {
         try
         {
-            #pragma warning disable CS8604 // Possible null reference argument.
             await _unitOfWorkService.UserService.UpdateAsync(userUpdateDto);
-            #pragma warning restore CS8604 // Possible null reference argument.
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Account updated succesfully!" });
         }
         catch (Exception ex)
@@ -52,9 +50,7 @@ public class UserController : Controller
     {
         try
         {
-        #pragma warning disable CS8604 // Possible null reference argument.
             await _unitOfWorkService.UserService.ChangeProfilePhotoAsync(profilePhotoDto);
-        #pragma warning restore CS8604 // Possible null reference argument.
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
         }
         catch (Exception ex)
@@ -68,9 +64,7 @@ public class UserController : Controller
     {
         try
         {
-        #pragma warning disable CS8604 // Possible null reference argument.
             await _unitOfWorkService.UserService.ChangeCoverPhotoAsync(coverPhotoDto);
-        #pragma warning restore CS8604 // Possible null reference argument.
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
         }
         catch (Exception ex)

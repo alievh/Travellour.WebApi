@@ -9,7 +9,7 @@ public static class Helper
         string fileNewName = FileGuidName(file);
         string rootInFolder = folders.Aggregate((result, folder) => Path.Combine(result, folder));
         string path = Path.Combine(root, rootInFolder, fileNewName);
-        using (FileStream fs = new FileStream(path, FileMode.Create))
+        using (FileStream fs = new(path, FileMode.Create))
         {
             await file.CopyToAsync(fs);
         }
