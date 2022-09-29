@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Travellour.Business.DTOs.Event;
+using Travellour.Business.DTOs.Group;
 using Travellour.Business.DTOs.Post;
 using Travellour.Business.DTOs.User;
 using Travellour.Core.Entities;
@@ -16,5 +18,10 @@ public class Mapper : Profile
         CreateMap<Post, PostGetDto>()
             .ForMember(c => c.ImageUrls, c => c.Ignore());
         CreateMap<PostCreateDto, Post>();
+        CreateMap<Group, GroupGetDto>();
+        CreateMap<GroupCreateDto, Group>();
+        CreateMap<Event, EventGetDto>()
+            .ForMember(c => c.ImageUrls, c => c.Ignore());
+        CreateMap<EventCreateDto, Event>();
     }
 }

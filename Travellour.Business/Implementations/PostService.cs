@@ -35,7 +35,9 @@ public class PostService : IPostService
             List<string> imageUrls = new();
             foreach(var image in post.Images)
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 imageUrls.Add(image.ImageUrl);
+#pragma warning restore CS8604 // Possible null reference argument.
             }
             postDto.ImageUrls = imageUrls;
         }

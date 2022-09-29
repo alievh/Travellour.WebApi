@@ -8,4 +8,6 @@ public class Image : IEntity
     public string? ImageUrl { get; set; }
     public int? PostId { get; set; }
     public Post? Post { get; set; }
+    public int? EventId { get; set; }
+    public Event? Event { get; set; }
 }

@@ -42,7 +42,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public IFriendService FriendService => _friendService ??= new FriendService();
 
-    public IGroupService GroupService => _groupService ??= new GroupService();
+    public IGroupService GroupService => _groupService ??= new GroupService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 
     public IImageService ImageService => _imageService ??= new ImageService();
 
@@ -52,5 +52,5 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 
-    public IEventService EventService => _eventService ??= new EventService(_unitOfWork, _mapper);
+    public IEventService EventService => _eventService ??= new EventService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 }

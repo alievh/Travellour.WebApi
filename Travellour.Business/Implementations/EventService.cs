@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 using Travellour.Business.DTOs.Event;
+using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -10,26 +14,63 @@ public class EventService : IEventService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHostEnvironment _hostEnvironment;
 
-    public EventService(IUnitOfWork unitOfWork, IMapper mapper)
+    public EventService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-    }
-
-    public async Task<EventGetDto> GetAsync(int id)
-    {
-        Event travellEvent = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "EventCreator", "EventMembers");
-        if (travellEvent is null) throw new NullReferenceException();
-        EventGetDto eventGetDto = _mapper.Map<EventGetDto>(travellEvent);
-        return eventGetDto;
+        _httpContextAccessor = httpContextAccessor;
+        _hostEnvironment = hostEnvironment;
     }
 
     public async Task<List<EventGetDto>> GetAllAsync()
     {
-        List<Event> travellEvents = await _unitOfWork.EventRepository.GetAllAsync(n => !n.IsDeleted, "EventCreator", "EventMembers");
-        if (travellEvents is null) throw new NullReferenceException();
-        List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(travellEvents);
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => !n.IsDeleted, "Images");
+        if (events is null) throw new NullReferenceException();
+        List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);
+        for (int i = 0; i < events.Count; i++)
+        {
+            if (events[i].Images != null)
+            {
+                List<string> imageUrls = new();
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var image in events[i].Images)
+                {
+                #pragma warning disable CS8604 // Possible null reference argument.
+                    imageUrls.Add(image.ImageUrl);
+                #pragma warning restore CS8604 // Possible null reference argument.
+                }
+                #pragma warning restore CS8602 // Dereference of a possibly null reference.
+                eventGetDtos[i].ImageUrls = imageUrls;
+            }
+        }
         return eventGetDtos;
+    }
+
+    public async Task CreateAsync(EventCreateDto eventCreateDto)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        Event eventDb = _mapper.Map<Event>(eventCreateDto);
+        eventDb.CreateDate = DateTime.UtcNow.AddHours(4);
+        eventDb.UserId = userId;
+        eventDb.EventCreator = appUser;
+        if (eventCreateDto.ImageFiles != null)
+        {
+            List<Image> images = new();
+            foreach (var imageFile in eventCreateDto.ImageFiles)
+            {
+                Image image = new()
+                {
+                    ImageUrl = await imageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
+                };
+                await _unitOfWork.ImageRepository.CreateAsync(image);
+                images.Add(image);
+            }
+            eventDb.Images = images;
+        }
+        await _unitOfWork.EventRepository.CreateAsync(eventDb);
     }
 }
