@@ -18,6 +18,7 @@ namespace Travellour.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
+
         [HttpGet("EventGetAll")]
         public async Task<ActionResult<List<EventGetDto>>> EventGetAllAsync()
         {

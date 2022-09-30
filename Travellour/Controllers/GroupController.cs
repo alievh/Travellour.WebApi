@@ -18,6 +18,19 @@ public class GroupController : Controller
         _unitOfWorkService = unitOfWorkService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GroupGetDto>> GroupGetAsync(int id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.GroupService.GetAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
     [HttpGet("GroupGetAll")]
     public async Task<ActionResult<List<GroupGetDto>>> GroupGetAllAsync()
     {

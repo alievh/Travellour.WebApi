@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Travellour.Business.DTOs.Event;
+using Travellour.Business.DTOs.Forum;
 using Travellour.Business.DTOs.Group;
 using Travellour.Business.DTOs.Post;
 using Travellour.Business.DTOs.User;
@@ -23,5 +24,8 @@ public class Mapper : Profile
         CreateMap<Event, EventGetDto>()
             .ForMember(c => c.ImageUrls, c => c.Ignore());
         CreateMap<EventCreateDto, Event>();
+        CreateMap<Forum, ForumGetDto>()
+            .ForMember(c => c.CommentCount, c => c.Ignore());
+        CreateMap<ForumCreateDto, Forum>();
     }
 }

@@ -38,7 +38,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public ICommentService CommentService => _commentService ??= new CommentService();
 
-    public IForumService ForumService => _forumService ??= new ForumService(_unitOfWork, _mapper);
+    public IForumService ForumService => _forumService ??= new ForumService(_unitOfWork, _mapper, _httpContextAccessor);
 
     public IFriendService FriendService => _friendService ??= new FriendService();
 

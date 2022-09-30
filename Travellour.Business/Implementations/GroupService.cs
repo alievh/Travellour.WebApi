@@ -25,6 +25,18 @@ public class GroupService : IGroupService
         _hostEnvironment = hostEnvironment;
     }
 
+    public async Task<GroupGetDto> GetAsync(int id)
+    {
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "Image");
+        if (group is null) throw new NullReferenceException();
+        GroupGetDto groupGetDto = _mapper.Map<GroupGetDto>(group);
+        if(group.Image is not null)
+        {
+            groupGetDto.GroupImage = group.Image?.ImageUrl;
+        }
+        return groupGetDto;
+    }
+
     public async Task CreateAsync(GroupCreateDto groupCreateDto)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -57,4 +69,6 @@ public class GroupService : IGroupService
         }
         return groupGetDtos;
     }
+
+    
 }
