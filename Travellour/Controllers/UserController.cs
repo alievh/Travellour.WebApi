@@ -85,4 +85,18 @@ public class UserController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPost("changePassword")]
+    public async Task<ActionResult> ChangePasswordAsync([FromBody] PasswordChangeDto passwordChangeDto)
+    {
+        try
+        {
+            await _unitOfWorkService.UserService.ChangeUserPasswordAsync(passwordChangeDto);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Password updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

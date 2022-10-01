@@ -9,4 +9,5 @@ public interface IUserService
     Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync();
     Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto);
     Task ChangeCoverPhotoAsync(CoverPhotoDto coverPhotoDto);
+    Task ChangeUserPasswordAsync(PasswordChangeDto passwordChangeDto);
 }

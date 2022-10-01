@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.User;
@@ -13,17 +14,19 @@ namespace Travellour.Business.Implementations;
 
 public class UserService : IUserService
 {
+    private readonly UserManager<AppUser> _userManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHostEnvironment _hostEnvironment;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment, UserManager<AppUser> userManager)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
         _hostEnvironment = hostEnvironment;
+        _userManager = userManager;
     }
 
     public async Task<UserGetDto> GetAsync(string id)
@@ -65,7 +68,7 @@ public class UserService : IUserService
             appUser.UserName = userUpdateDto.Username?.Trim();
         }
 
-        await _unitOfWork.UserRepository.UpdateAsync(appUser);
+        await _userManager.UpdateAsync(appUser);
     }
 
     public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
@@ -110,4 +113,18 @@ public class UserService : IUserService
         appUser.CoverImageId = image.Id;
         await _unitOfWork.SaveAsync();
     }
+
+    public async Task ChangeUserPasswordAsync(PasswordChangeDto passwordChangeDto)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage", "CoverImage");
+        if (!await _userManager.CheckPasswordAsync(user, passwordChangeDto.OldPassword)) throw new NullReferenceException();
+        if(passwordChangeDto.NewPassword?.Trim() != passwordChangeDto.NewPasswordAgain?.Trim())
+        {
+            throw new NullReferenceException();
+        }
+        await _userManager.RemovePasswordAsync(user);
+        await _userManager.AddPasswordAsync(user, passwordChangeDto.NewPassword);
+    }
+
 }

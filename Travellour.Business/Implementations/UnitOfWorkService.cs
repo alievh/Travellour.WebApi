@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
+using Travellour.Core.Entities;
 
 namespace Travellour.Business.Implementations;
 
@@ -24,17 +26,19 @@ public class UnitOfWorkService : IUnitOfWorkService
     private readonly IMapper _mapper;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly UserManager<AppUser> _userManager;
 
-    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment)
+    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment, UserManager<AppUser> userManager)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
         _hostEnvironment = hostEnvironment;
+        _userManager = userManager;
     }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public IUserService UserService => _userService ??= new UserService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
+    public IUserService UserService => _userService ??= new UserService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment, _userManager);
 
     public ICommentService CommentService => _commentService ??= new CommentService();
 
