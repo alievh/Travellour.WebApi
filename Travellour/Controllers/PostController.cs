@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Travellour.Business.DTOs.Post;
+using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.DTOs.StatusCode;
 using Travellour.Business.Interfaces;
 
@@ -33,7 +33,7 @@ public class PostController : Controller
 
     [HttpGet("PostGetAll")]
     public async Task<ActionResult<PostGetDto>> PostGetAllAsync()
-    {   
+    {
         try
         {
             return Ok(await _unitOfWorkService.PostService.GetAllAsync());
@@ -50,7 +50,7 @@ public class PostController : Controller
         try
         {
             await _unitOfWorkService.PostService.CreateAsync(postCreateDto);
-            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Post created succesfully!" });
         }
         catch (Exception ex)
         {
@@ -58,7 +58,20 @@ public class PostController : Controller
         }
     }
 
-    [HttpPost("PostDelete")]
+    [HttpGet("userPost/{id}")]
+    public async Task<ActionResult<List<PostGetDto>>> PostByUserIdAsync(string? id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.PostService.GetPostByUserIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPut("delete/{id}")]
     public async Task<ActionResult> PostDeleteAsync(int id)
     {
         try

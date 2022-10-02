@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Travellour.Business.DTOs.Authentication;
-using Travellour.Business.DTOs.User;
+using Travellour.Business.DTOs.AuthenticationDTO;
+using Travellour.Business.DTOs.UserDTO;
 using Travellour.Business.Helpers.Enums;
 using Travellour.Business.Token.Interfaces;
 using Travellour.Core.Entities;

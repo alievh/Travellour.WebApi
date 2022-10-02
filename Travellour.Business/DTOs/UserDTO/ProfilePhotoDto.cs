@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Travellour.Business.DTOs.User;
+namespace Travellour.Business.DTOs.UserDTO;
 
-public class CoverPhotoDto
+public class ProfilePhotoDto
 {
     public string? ImageName { get; set; }
     public IFormFile? ImageFile { get; set; }

@@ -30,6 +30,9 @@
             "projectReferences": {
               "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {
                 "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj"
+              },
+              "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj": {
+                "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj"
               }
             }
           }

@@ -1,4 +1,4 @@
-﻿using Travellour.Business.DTOs.Group;
+﻿using Travellour.Business.DTOs.GroupDTO;
 
 namespace Travellour.Business.Interfaces;
 

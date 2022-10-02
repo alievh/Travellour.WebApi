@@ -8,13 +8,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Travellour.Core\Travellour.Core.csproj" />
+    <ProjectReference Include="..\Travellour.Data\Travellour.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Comment\" />
-    <Folder Include="DTOs\Friend\" />
-    <Folder Include="DTOs\Like\" />
-    <Folder Include="DTOs\Notification\" />
+    <Folder Include="DTOs\CommentDTO\" />
+    <Folder Include="DTOs\FriendDTO\" />
+    <Folder Include="DTOs\LikeDTO\" />
+    <Folder Include="DTOs\NotificationDTO\" />
   </ItemGroup>
 
   <ItemGroup>

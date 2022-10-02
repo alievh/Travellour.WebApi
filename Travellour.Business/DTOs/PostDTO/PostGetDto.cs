@@ -1,9 +1,10 @@
 ﻿using Travellour.Core.Entities;
 
-namespace Travellour.Business.DTOs.Post;
+namespace Travellour.Business.DTOs.PostDTO;
 
 public class PostGetDto
 {
+    public int Id { get; set; }
     public string? Content { get; set; }
     public AppUser? User { get; set; }
     public ICollection<Like>? Likes { get; set; }

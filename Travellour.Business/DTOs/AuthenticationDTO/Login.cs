@@ -1,4 +1,4 @@
-﻿namespace Travellour.Business.DTOs.Authentication;
+﻿namespace Travellour.Business.DTOs.AuthenticationDTO;
 
 public class Login
 {

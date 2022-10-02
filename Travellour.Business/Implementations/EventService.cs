@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Travellour.Business.DTOs.Event;
+using Travellour.Business.DTOs.EventDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -35,14 +35,14 @@ public class EventService : IEventService
             if (events[i].Images != null)
             {
                 List<string> imageUrls = new();
-                #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 foreach (var image in events[i].Images)
                 {
-                #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
                     imageUrls.Add(image.ImageUrl);
-                #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
-                #pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 eventGetDtos[i].ImageUrls = imageUrls;
             }
         }

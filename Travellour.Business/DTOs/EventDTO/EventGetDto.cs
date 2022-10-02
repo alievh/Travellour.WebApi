@@ -1,4 +1,4 @@
-﻿namespace Travellour.Business.DTOs.Event;
+﻿namespace Travellour.Business.DTOs.EventDTO;
 
 public class EventGetDto
 {

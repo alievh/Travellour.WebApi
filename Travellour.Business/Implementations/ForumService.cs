@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Travellour.Business.DTOs.Forum;
+using Travellour.Business.DTOs.ForumDTO;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -38,7 +38,7 @@ public class ForumService : IForumService
         {
 #       pragma warning disable CS8604 // Possible null reference argument.
             forumGetDto[i].CommentCount = forums[i].Comments.Count();
-        #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
         }
         return forumGetDto;
     }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Travellour.Core.Entities;
 
-namespace Travellour.Business.DTOs.Post;
+namespace Travellour.Business.DTOs.PostDTO;
 
 public class PostCreateDto
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Travellour.Business.DTOs.Post;
+using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -28,12 +28,12 @@ public class PostService : IPostService
     public async Task<PostGetDto> GetAsync(int id)
     {
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id, "User.ProfileImage", "Likes", "Comments", "Images");
-        if(post is null) throw new NullReferenceException();
+        if (post is null) throw new NullReferenceException();
         PostGetDto postDto = _mapper.Map<PostGetDto>(post);
-        if(post.Images != null)
+        if (post.Images != null)
         {
             List<string> imageUrls = new();
-            foreach(var image in post.Images)
+            foreach (var image in post.Images)
             {
 #pragma warning disable CS8604 // Possible null reference argument.
                 imageUrls.Add(image.ImageUrl);
@@ -47,7 +47,7 @@ public class PostService : IPostService
     public async Task<List<PostGetDto>> GetAllAsync()
     {
         List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => !n.IsDeleted, "User.ProfileImage", "Likes", "Comments", "Images");
-        
+
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postsDto = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
@@ -99,5 +99,29 @@ public class PostService : IPostService
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id);
         if (post == null) throw new NullReferenceException();
         await _unitOfWork.PostRepository.DeleteAsync(post);
+    }
+
+    public async Task<List<PostGetDto>> GetPostByUserIdAsync(string? id)
+    {
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.UserId == id, "Images", "Likes", "Comments", "User.ProfileImage");
+        if (posts is null) throw new NullReferenceException();
+        List<PostGetDto> postDtos = _mapper.Map<List<PostGetDto>>(posts);
+        for (int i = 0; i < posts.Count; i++)
+        {
+            if (posts[i].Images != null)
+            {
+                List<string> imageUrls = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var image in posts[i].Images)
+                {
+#pragma warning disable CS8604 // Possible null reference argument.
+                    imageUrls.Add(image.ImageUrl);
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                postDtos[i].ImageUrls = imageUrls;
+            }
+        }
+        return postDtos;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Travellour.Business.DTOs.User;
+﻿namespace Travellour.Business.DTOs.UserDTO;
 
 public class JwtUserDataDto
 {

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Travellour.Business.DTOs.Event;
-using Travellour.Business.DTOs.Forum;
-using Travellour.Business.DTOs.Group;
-using Travellour.Business.DTOs.Post;
-using Travellour.Business.DTOs.User;
+using Travellour.Business.DTOs.EventDTO;
+using Travellour.Business.DTOs.ForumDTO;
+using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.PostDTO;
+using Travellour.Business.DTOs.UserDTO;
 using Travellour.Core.Entities;
 
 namespace Travellour.Business.Profiles;
@@ -15,6 +15,11 @@ public class Mapper : Profile
         CreateMap<AppUser, UserGetDto>()
             .ForMember(c => c.ProfileImage, c => c.Ignore())
             .ForMember(c => c.CoverImage, c => c.Ignore());
+        CreateMap<AppUser, UserProfileDto>()
+            .ForMember(c => c.ProfileImage, c => c.Ignore())
+            .ForMember(c => c.CoverImage, c => c.Ignore())
+            .ForMember(c => c.PostCount, c => c.Ignore())
+            .ForMember(c => c.FriendCount, c => c.Ignore());
         CreateMap<AppUser, FriendSuggestionDto>();
         CreateMap<Post, PostGetDto>()
             .ForMember(c => c.ImageUrls, c => c.Ignore());

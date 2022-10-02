@@ -1,4 +1,4 @@
-﻿using Travellour.Business.DTOs.User;
+﻿using Travellour.Business.DTOs.UserDTO;
 
 namespace Travellour.Business.Interfaces;
 
@@ -10,4 +10,5 @@ public interface IUserService
     Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto);
     Task ChangeCoverPhotoAsync(CoverPhotoDto coverPhotoDto);
     Task ChangeUserPasswordAsync(PasswordChangeDto passwordChangeDto);
+    Task<UserProfileDto> GetUserProfileAsync(string? id);
 }

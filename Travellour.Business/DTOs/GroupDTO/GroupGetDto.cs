@@ -1,4 +1,4 @@
-﻿namespace Travellour.Business.DTOs.Group;
+﻿namespace Travellour.Business.DTOs.GroupDTO;
 
 public class GroupGetDto
 {

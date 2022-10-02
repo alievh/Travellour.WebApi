@@ -1,4 +1,4 @@
-﻿using Travellour.Business.DTOs.Forum;
+﻿using Travellour.Business.DTOs.ForumDTO;
 
 namespace Travellour.Business.Interfaces;
 

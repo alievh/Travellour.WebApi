@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Travellour.Business.DTOs.User;
+using Travellour.Business.DTOs.PostDTO;
+using Travellour.Business.DTOs.UserDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -74,9 +75,14 @@ public class UserService : IUserService
     public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        List<AppUser> appUsers = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, includes: "ProfileImage");
-        if (appUsers is null) throw new NullReferenceException();
-        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(appUsers);
+        List<AppUser> user = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, includes: "ProfileImage");
+        if (user is null) throw new NullReferenceException();
+        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(user);
+        for (int i = 0; i < user.Count; i++)
+        {
+            friendSuggestionDtos[i].ImageUrl = user[i].ProfileImage?.ImageUrl;
+        }
+
         return friendSuggestionDtos;
     }
 
@@ -85,12 +91,12 @@ public class UserService : IUserService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage");
         if (appUser is null) throw new NullReferenceException();
-        #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {
             ImageUrl = await profilePhotoDto.ImageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
         };
-        #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
         await _unitOfWork.ImageRepository.CreateAsync(image);
         appUser.ProfileImage = image;
         appUser.ProfileImageId = image.Id;
@@ -102,12 +108,12 @@ public class UserService : IUserService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage", "CoverImage");
         if (appUser is null) throw new NullReferenceException();
-        #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {
             ImageUrl = await coverPhotoDto.ImageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
         };
-        #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
         await _unitOfWork.ImageRepository.CreateAsync(image);
         appUser.CoverImage = image;
         appUser.CoverImageId = image.Id;
@@ -119,7 +125,7 @@ public class UserService : IUserService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage", "CoverImage");
         if (!await _userManager.CheckPasswordAsync(user, passwordChangeDto.OldPassword)) throw new NullReferenceException();
-        if(passwordChangeDto.NewPassword?.Trim() != passwordChangeDto.NewPasswordAgain?.Trim())
+        if (passwordChangeDto.NewPassword?.Trim() != passwordChangeDto.NewPasswordAgain?.Trim())
         {
             throw new NullReferenceException();
         }
@@ -127,4 +133,16 @@ public class UserService : IUserService
         await _userManager.AddPasswordAsync(user, passwordChangeDto.NewPassword);
     }
 
+    public async Task<UserProfileDto> GetUserProfileAsync(string? id)
+    {
+        AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
+        UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
+        userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
+        userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;
+        userProfileDto.FriendCount = user.Friends is null ? 0 : user.Friends.Count;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        return userProfileDto;
+    }
 }

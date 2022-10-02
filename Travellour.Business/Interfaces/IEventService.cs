@@ -1,4 +1,4 @@
-﻿using Travellour.Business.DTOs.Event;
+﻿using Travellour.Business.DTOs.EventDTO;
 
 namespace Travellour.Business.Interfaces;
 

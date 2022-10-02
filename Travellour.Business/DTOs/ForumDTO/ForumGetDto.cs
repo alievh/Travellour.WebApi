@@ -1,6 +1,6 @@
 ﻿using Travellour.Core.Entities;
 
-namespace Travellour.Business.DTOs.Forum;
+namespace Travellour.Business.DTOs.ForumDTO;
 
 public class ForumGetDto
 {

@@ -625,7 +625,8 @@
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "11.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.8",
-          "Travellour.Core": "1.0.0"
+          "Travellour.Core": "1.0.0",
+          "Travellour.Data": "1.0.0"
         },
         "runtime": {
           "Travellour.Business.dll": {}

@@ -1,5 +1,4 @@
-﻿using Travellour.Business.DTOs.Post;
-using Travellour.Core.Entities;
+﻿using Travellour.Business.DTOs.PostDTO;
 
 namespace Travellour.Business.Interfaces;
 
@@ -9,4 +8,5 @@ public interface IPostService
     Task<List<PostGetDto>> GetAllAsync();
     Task CreateAsync(PostCreateDto postCreateDto);
     Task DeleteAsync(int id);
+    Task<List<PostGetDto>> GetPostByUserIdAsync(string? id);
 }

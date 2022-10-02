@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Travellour.Business.DTOs.Forum;
+using Travellour.Business.DTOs.ForumDTO;
 using Travellour.Business.DTOs.StatusCode;
 using Travellour.Business.Interfaces;
 

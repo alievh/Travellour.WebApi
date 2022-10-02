@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Travellour.Business.DTOs.Group;
+using Travellour.Business.DTOs.GroupDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -30,7 +30,7 @@ public class GroupService : IGroupService
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "Image");
         if (group is null) throw new NullReferenceException();
         GroupGetDto groupGetDto = _mapper.Map<GroupGetDto>(group);
-        if(group.Image is not null)
+        if (group.Image is not null)
         {
             groupGetDto.GroupImage = group.Image?.ImageUrl;
         }
@@ -70,5 +70,5 @@ public class GroupService : IGroupService
         return groupGetDtos;
     }
 
-    
+
 }

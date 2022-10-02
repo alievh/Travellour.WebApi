@@ -1,6 +1,6 @@
 ﻿using Travellour.Core.Entities.Enum;
 
-namespace Travellour.Business.DTOs.Authentication;
+namespace Travellour.Business.DTOs.AuthenticationDTO;
 
 public class Register
 {

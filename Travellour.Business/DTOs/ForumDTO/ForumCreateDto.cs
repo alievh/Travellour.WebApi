@@ -1,4 +1,4 @@
-﻿namespace Travellour.Business.DTOs.Forum;
+﻿namespace Travellour.Business.DTOs.ForumDTO;
 
 public class ForumCreateDto
 {

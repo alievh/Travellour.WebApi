@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Travellour.Business.DTOs.StatusCode;
-using Travellour.Business.DTOs.User;
+using Travellour.Business.DTOs.UserDTO;
 using Travellour.Business.Interfaces;
 
 namespace Travellour.Controllers;
@@ -93,6 +93,19 @@ public class UserController : Controller
         {
             await _unitOfWorkService.UserService.ChangeUserPasswordAsync(passwordChangeDto);
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Password updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpGet("userProfile/{id}")]
+    public async Task<ActionResult> UserProfileAsync(string? id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.UserService.GetUserProfileAsync(id));
         }
         catch (Exception ex)
         {
