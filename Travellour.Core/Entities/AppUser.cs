@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 using Travellour.Core.Entities.Base;
 using Travellour.Core.Entities.Enum;
 
@@ -18,4 +19,7 @@ public class AppUser : IdentityUser, IEntity
     public ICollection<AppUser>? Friends { get; set; }
     public ICollection<Post>? Posts { get; set; }
     public ICollection<Notification>? Notifications { get; set; }
+    public ICollection<UserFriend>? UserFriends { get; set; }
+    public ICollection<Event>? Events { get; set; }
+    public ICollection<Forum>? Forums { get; set; }
 }

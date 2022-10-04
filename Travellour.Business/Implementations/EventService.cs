@@ -55,7 +55,7 @@ public class EventService : IEventService
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Event eventDb = _mapper.Map<Event>(eventCreateDto);
         eventDb.CreateDate = DateTime.UtcNow.AddHours(4);
-        eventDb.UserId = userId;
+        eventDb.EventCreatorId = userId;
         eventDb.EventCreator = appUser;
         if (eventCreateDto.ImageFiles != null)
         {

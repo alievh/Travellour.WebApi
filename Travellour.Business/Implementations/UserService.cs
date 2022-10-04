@@ -72,19 +72,7 @@ public class UserService : IUserService
         await _userManager.UpdateAsync(appUser);
     }
 
-    public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
-    {
-        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        List<AppUser> user = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, includes: "ProfileImage");
-        if (user is null) throw new NullReferenceException();
-        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(user);
-        for (int i = 0; i < user.Count; i++)
-        {
-            friendSuggestionDtos[i].ImageUrl = user[i].ProfileImage?.ImageUrl;
-        }
-
-        return friendSuggestionDtos;
-    }
+    
 
     public async Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto)
     {
@@ -139,10 +127,8 @@ public class UserService : IUserService
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
         userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
         userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
         userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;
         userProfileDto.FriendCount = user.Friends is null ? 0 : user.Friends.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         return userProfileDto;
     }
 }

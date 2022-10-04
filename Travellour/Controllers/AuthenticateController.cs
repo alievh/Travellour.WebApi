@@ -45,7 +45,7 @@ namespace Travellour.Controllers
                 Birthday = register.Birthday,
                 RegisterDate = DateTime.UtcNow.AddHours(4),
                 ProfileImageId = 2,
-                CoverImageId = 9
+                CoverImageId = 10
             };
             IdentityResult result = await _userManager.CreateAsync(user, register.Password);
             if (!result.Succeeded)

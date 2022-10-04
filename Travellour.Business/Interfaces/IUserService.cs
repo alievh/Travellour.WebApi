@@ -6,7 +6,6 @@ public interface IUserService
 {
     Task<UserGetDto> GetAsync(string id);
     Task UpdateAsync(UserUpdateDto userUpdateDto);
-    Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync();
     Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto);
     Task ChangeCoverPhotoAsync(CoverPhotoDto coverPhotoDto);
     Task ChangeUserPasswordAsync(PasswordChangeDto passwordChangeDto);

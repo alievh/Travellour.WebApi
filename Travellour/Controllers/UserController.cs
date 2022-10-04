@@ -73,18 +73,7 @@ public class UserController : Controller
         }
     }
 
-    [HttpGet("friendSuggestion")]
-    public async Task<ActionResult> GetFriendSuggestionAsync()
-    {
-        try
-        {
-            return Ok(await _unitOfWorkService.UserService.GetFriendSuggestionAsync());
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
-        }
-    }
+    
 
     [HttpPost("changePassword")]
     public async Task<ActionResult> ChangePasswordAsync([FromBody] PasswordChangeDto passwordChangeDto)

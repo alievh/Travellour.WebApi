@@ -44,7 +44,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public IForumService ForumService => _forumService ??= new ForumService(_unitOfWork, _mapper, _httpContextAccessor);
 
-    public IFriendService FriendService => _friendService ??= new FriendService();
+    public IFriendService FriendService => _friendService ??= new FriendService(_unitOfWork, _httpContextAccessor, _mapper);
 
     public IGroupService GroupService => _groupService ??= new GroupService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 

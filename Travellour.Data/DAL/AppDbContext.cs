@@ -19,4 +19,10 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Group> Groups { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<AppUser>().HasMany(u => u.UserFriends).WithOne(uf => uf.User).HasForeignKey(uf => uf.UserId);
+        modelBuilder.Entity<AppUser>().HasMany(u => u.Events).WithOne(uf => uf.EventCreator).HasForeignKey(uf => uf.EventCreatorId);
+        base.OnModelCreating(modelBuilder);
+    }
 }
