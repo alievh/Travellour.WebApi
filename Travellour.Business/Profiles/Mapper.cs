@@ -19,7 +19,8 @@ public class Mapper : Profile
             .ForMember(c => c.ProfileImage, c => c.Ignore())
             .ForMember(c => c.CoverImage, c => c.Ignore())
             .ForMember(c => c.PostCount, c => c.Ignore())
-            .ForMember(c => c.FriendCount, c => c.Ignore());
+            .ForMember(c => c.FriendCount, c => c.Ignore())
+            .ForMember(c => c.Status, c => c.Ignore());
         CreateMap<AppUser, FriendSuggestionDto>();
         CreateMap<Post, PostGetDto>()
             .ForMember(c => c.ImageUrls, c => c.Ignore());

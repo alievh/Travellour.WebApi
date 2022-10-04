@@ -1,6 +1,4 @@
-﻿using Travellour.Core.Entities;
-
-namespace Travellour.Business.DTOs.UserDTO;
+﻿namespace Travellour.Business.DTOs.UserDTO;
 
 public class FriendSuggestionDto
 {

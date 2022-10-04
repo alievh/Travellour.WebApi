@@ -1,4 +1,6 @@
-﻿namespace Travellour.Business.DTOs.UserDTO;
+﻿using Travellour.Core.Entities.Enum;
+
+namespace Travellour.Business.DTOs.UserDTO;
 
 public class UserGetDto
 {

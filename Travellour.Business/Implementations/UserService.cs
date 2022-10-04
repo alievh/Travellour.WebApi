@@ -32,7 +32,7 @@ public class UserService : IUserService
 
     public async Task<UserGetDto> GetAsync(string id)
     {
-        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage");
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "UserFriends");
 
         if (appUser is null)
         {
@@ -42,6 +42,7 @@ public class UserService : IUserService
         UserGetDto userDto = _mapper.Map<UserGetDto>(appUser);
         userDto.ProfileImage = appUser.ProfileImage is not null ? appUser.ProfileImage.ImageUrl : "";
         userDto.CoverImage = appUser.CoverImage is not null ? appUser.CoverImage.ImageUrl : "";
+        
         return userDto;
     }
 
@@ -123,12 +124,21 @@ public class UserService : IUserService
 
     public async Task<UserProfileDto> GetUserProfileAsync(string? id)
     {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
+        UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == id && u.FriendId == userId) || (u.FriendId == id && u.UserId == userId));
         userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
         userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
         userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;
         userProfileDto.FriendCount = user.Friends is null ? 0 : user.Friends.Count;
+        if(userFriend is not null)
+        {
+            userProfileDto.Status = Core.Entities.Enum.FriendRequestStatus.Accepted;
+        } else if (userFriend is null)
+        {
+            userProfileDto.Status = Core.Entities.Enum.FriendRequestStatus.NotFriend;
+        }
         return userProfileDto;
     }
 }

@@ -85,12 +85,21 @@ public class FriendService : IFriendService
     public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        List<AppUser> user = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, "ProfileImage", "UserFriends");
-        if (user is null) throw new NullReferenceException();
-        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(user);
-        for (int i = 0; i < user.Count; i++)
+        List<AppUser> users = await _unitOfWork.UserRepository.GetAllAsync(predicate: u => u.Id != userId, "ProfileImage", "UserFriends");
+        if (users is null) throw new NullReferenceException();
+        List<AppUser> notFriends = new();
+        foreach (var user in users)
         {
-            friendSuggestionDtos[i].ImageUrl = user[i].ProfileImage?.ImageUrl;
+            UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == user.Id && u.FriendId == userId) || (u.FriendId == userId && u.UserId == user.Id));
+            if (userFriend is null)
+            {
+                notFriends.Add(user);
+            }
+        }
+        List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(notFriends);
+        for (int i = 0; i < notFriends.Count; i++)
+        {
+            friendSuggestionDtos[i].ImageUrl = notFriends[i].ProfileImage?.ImageUrl;
         }
 
         return friendSuggestionDtos;
