@@ -23,9 +23,14 @@ public class Mapper : Profile
             .ForMember(c => c.Status, c => c.Ignore());
         CreateMap<AppUser, FriendSuggestionDto>();
         CreateMap<Post, PostGetDto>()
-            .ForMember(c => c.ImageUrls, c => c.Ignore());
+            .ForMember(c => c.ImageUrls, c => c.Ignore())
+            .ForMember(c => c.LikeCount, c => c.Ignore())
+            .ForMember(c => c.CommentCount, c => c.Ignore());
         CreateMap<PostCreateDto, Post>();
         CreateMap<Group, GroupGetDto>();
+        CreateMap<Group, GroupProfileDto>()
+            .ForMember(c => c.MemberCount, c => c.Ignore())
+            .ForMember(c => c.PostCount, c => c.Ignore());
         CreateMap<GroupCreateDto, Group>();
         CreateMap<Event, EventGetDto>()
             .ForMember(c => c.ImageUrls, c => c.Ignore());

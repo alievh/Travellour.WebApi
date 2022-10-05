@@ -6,9 +6,10 @@ public class Group : BaseEntity, IEntity
 {
     public string? GroupName { get; set; }
     public string? GroupDescription { get; set; }
-    public string? UserId { get; set; }
+    public string? GroupAdminId { get; set; }
     public AppUser? GroupAdmin { get; set; }
-    public ICollection<AppUser>? GroupMembers { get; set; }
     public int? ImageId { get; set; }
     public Image? Image { get; set; }
+    public ICollection<AppUser>? GroupMembers { get; set; }
+    public ICollection<Post>? GroupPosts { get; set; }
 }

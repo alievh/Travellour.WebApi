@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221005101202_UpdatedUserGroupRelation")]
+    partial class UpdatedUserGroupRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -749,15 +751,13 @@ namespace Travellour.Data.Migrations
 
             modelBuilder.Entity("Travellour.Core.Entities.Post", b =>
                 {
-                    b.HasOne("Travellour.Core.Entities.Group", "Group")
+                    b.HasOne("Travellour.Core.Entities.Group", null)
                         .WithMany("GroupPosts")
                         .HasForeignKey("GroupId");
 
                     b.HasOne("Travellour.Core.Entities.AppUser", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Group");
 
                     b.Navigation("User");
                 });

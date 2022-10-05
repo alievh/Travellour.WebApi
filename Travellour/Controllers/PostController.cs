@@ -84,4 +84,32 @@ public class PostController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPost("likeadd/{id}")]
+    public async Task<ActionResult> LikeAddAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.LikeService.AddLikeAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Post deleted succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPut("likedelete/{id}")]
+    public async Task<ActionResult> LikeDeleteAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.LikeService.DeleteLikeAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Post deleted succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

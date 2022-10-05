@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -37,13 +38,25 @@ public class GroupService : IGroupService
         return groupGetDto;
     }
 
+    public async Task<List<GroupGetDto>> GetAllAsyn()
+    {
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(includes: "Image");
+        if (groups is null) throw new NullReferenceException();
+        List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groupGetDtos[i].GroupImage = groups[i].Image?.ImageUrl;
+        }
+        return groupGetDtos;
+    }
+
     public async Task CreateAsync(GroupCreateDto groupCreateDto)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Group group = _mapper.Map<Group>(groupCreateDto);
         group.CreateDate = DateTime.UtcNow.AddHours(4);
-        group.UserId = userId;
+        group.GroupAdminId = userId;
         group.GroupAdmin = appUser;
         if (groupCreateDto.ImageFile != null)
         {
@@ -58,17 +71,47 @@ public class GroupService : IGroupService
         await _unitOfWork.GroupRepository.CreateAsync(group);
     }
 
-    public async Task<List<GroupGetDto>> GetAllAsyn()
+    public async Task<GroupProfileDto> GetGroupProfileAsync(int id)
     {
-        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(includes: "Image");
-        if (groups is null) throw new NullReferenceException();
-        List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
-        for (int i = 0; i < groups.Count; i++)
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin.ProfileImage", "GroupMembers", "Image", "GroupPosts");
+        if (group is null) throw new NullReferenceException();
+        GroupProfileDto groupProfileDto = _mapper.Map<GroupProfileDto>(group);
+        if (group.Image is not null)
         {
-            groupGetDtos[i].GroupImage = groups[i].Image?.ImageUrl;
+            groupProfileDto.GroupImage = group.Image?.ImageUrl;
         }
-        return groupGetDtos;
+        #pragma warning disable CS8602 // Dereference of a possibly null reference.
+        groupProfileDto.MemberCount = group.GroupMembers.Count;
+        groupProfileDto.PostCount = group.GroupPosts.Count;
+        #pragma warning restore CS8602 // Dereference of a possibly null reference.
+        return groupProfileDto;
     }
 
-
+    public async Task<List<PostGetDto>> GetAllGroupPostAsync(int id)
+    {
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.GroupId == id, "Group", "User.ProfileImage", "Images", "Likes", "Comments");
+        if (posts is null) throw new NullReferenceException();
+        List<PostGetDto> postGetDtos = _mapper.Map<List<PostGetDto>>(posts);
+        for (int i = 0; i < posts.Count; i++)
+        {
+            if (posts[i].Images != null)
+            {
+                List<string> imageUrls = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var image in posts[i].Images)
+                {
+#pragma warning disable CS8604 // Possible null reference argument.
+                    imageUrls.Add(image.ImageUrl);
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                postGetDtos[i].ImageUrls = imageUrls;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                postGetDtos[i].LikeCount = posts[i].Likes.Count;
+                postGetDtos[i].CommentCount = posts[i].Comments.Count;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
+        }
+        return postGetDtos;
+    }
 }

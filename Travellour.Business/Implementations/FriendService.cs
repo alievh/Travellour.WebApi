@@ -90,7 +90,7 @@ public class FriendService : IFriendService
         List<AppUser> notFriends = new();
         foreach (var user in users)
         {
-            UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == user.Id && u.FriendId == userId) || (u.FriendId == userId && u.UserId == user.Id));
+            UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == user.Id && u.FriendId == userId) || (u.FriendId == user.Id && u.UserId == userId));
             if (userFriend is null)
             {
                 notFriends.Add(user);

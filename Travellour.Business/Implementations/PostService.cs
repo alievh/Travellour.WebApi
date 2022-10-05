@@ -27,9 +27,13 @@ public class PostService : IPostService
 
     public async Task<PostGetDto> GetAsync(int id)
     {
-        Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id, "User.ProfileImage", "Likes", "Comments", "Images");
+        Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id, "User.ProfileImage", "Likes", "Comments", "Images", "Group");
         if (post is null) throw new NullReferenceException();
         PostGetDto postDto = _mapper.Map<PostGetDto>(post);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        postDto.LikeCount = post.Likes.Count;
+        postDto.CommentCount = post.Comments.Count;
+#pragma warning restore CS8602s // Dereference of a possibly null reference.
         if (post.Images != null)
         {
             List<string> imageUrls = new();
@@ -46,7 +50,7 @@ public class PostService : IPostService
 
     public async Task<List<PostGetDto>> GetAllAsync()
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => !n.IsDeleted, "User.ProfileImage", "Likes", "Comments", "Images");
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => !n.IsDeleted, "User.ProfileImage", "Likes", "Comments", "Images", "Group");
 
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postsDto = _mapper.Map<List<PostGetDto>>(posts);
@@ -64,6 +68,10 @@ public class PostService : IPostService
                 }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 postsDto[i].ImageUrls = imageUrls;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                postsDto[i].CommentCount = posts[i].Comments.Count;
+                postsDto[i].LikeCount = posts[i].Likes.Count;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
         return postsDto;
@@ -77,6 +85,10 @@ public class PostService : IPostService
         post.CreateDate = DateTime.UtcNow.AddHours(4);
         post.UserId = userId;
         post.User = appUser;
+        if (postCreateDto.GroupId is not null)
+        {
+            post.GroupId = postCreateDto.GroupId;
+        }
         if (postCreateDto.ImageFiles != null)
         {
             List<Image> images = new();
@@ -103,7 +115,7 @@ public class PostService : IPostService
 
     public async Task<List<PostGetDto>> GetPostByUserIdAsync(string? id)
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.UserId == id, "Images", "Likes", "Comments", "User.ProfileImage");
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.UserId == id, "Images", "Likes", "Comments", "User.ProfileImage", "Group");
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
@@ -120,6 +132,10 @@ public class PostService : IPostService
                 }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 postDtos[i].ImageUrls = imageUrls;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                postDtos[i].LikeCount = posts[i].Likes.Count;
+                postDtos[i].CommentCount = posts[i].Comments.Count;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
         return postDtos;

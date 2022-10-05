@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.DTOs.StatusCode;
 using Travellour.Business.Interfaces;
 
@@ -51,6 +52,32 @@ public class GroupController : Controller
         {
             await _unitOfWorkService.GroupService.CreateAsync(groupCreateDto);
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpGet("GroupProfile/{id}")]
+    public async Task<ActionResult<GroupProfileDto>> GroupProfileGetAsync(int id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.GroupService.GetGroupProfileAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpGet("GroupPostGetAll/{id}")]
+    public async Task<ActionResult<List<PostGetDto>>> GroupPostGetAllAsync(int id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.GroupService.GetAllGroupPostAsync(id));
         }
         catch (Exception ex)
         {

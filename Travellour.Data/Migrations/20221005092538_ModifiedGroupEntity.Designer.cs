@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221005092538_ModifiedGroupEntity")]
+    partial class ModifiedGroupEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,6 +402,9 @@ namespace Travellour.Data.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupAdminId");
@@ -690,7 +695,7 @@ namespace Travellour.Data.Migrations
             modelBuilder.Entity("Travellour.Core.Entities.Group", b =>
                 {
                     b.HasOne("Travellour.Core.Entities.AppUser", "GroupAdmin")
-                        .WithMany("Groups")
+                        .WithMany()
                         .HasForeignKey("GroupAdminId");
 
                     b.HasOne("Travellour.Core.Entities.Image", "Image")
@@ -749,15 +754,13 @@ namespace Travellour.Data.Migrations
 
             modelBuilder.Entity("Travellour.Core.Entities.Post", b =>
                 {
-                    b.HasOne("Travellour.Core.Entities.Group", "Group")
+                    b.HasOne("Travellour.Core.Entities.Group", null)
                         .WithMany("GroupPosts")
                         .HasForeignKey("GroupId");
 
                     b.HasOne("Travellour.Core.Entities.AppUser", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Group");
 
                     b.Navigation("User");
                 });
@@ -784,8 +787,6 @@ namespace Travellour.Data.Migrations
                     b.Navigation("Forums");
 
                     b.Navigation("Friends");
-
-                    b.Navigation("Groups");
 
                     b.Navigation("Notifications");
 

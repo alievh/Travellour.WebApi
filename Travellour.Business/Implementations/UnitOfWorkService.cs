@@ -50,7 +50,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public IImageService ImageService => _imageService ??= new ImageService();
 
-    public ILikeService LikeService => _likeService ??= new LikeService();
+    public ILikeService LikeService => _likeService ??= new LikeService(_unitOfWork, _httpContextAccessor);
 
     public INotificationService NotificationService => _notificationService ??= new NotificationService();
 

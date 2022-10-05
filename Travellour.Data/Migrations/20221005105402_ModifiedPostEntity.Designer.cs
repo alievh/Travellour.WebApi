@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221005105402_ModifiedPostEntity")]
+    partial class ModifiedPostEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -516,7 +518,10 @@ namespace Travellour.Data.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GroupId")
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GroupId1")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -530,7 +535,7 @@ namespace Travellour.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupId1");
 
                     b.HasIndex("UserId");
 
@@ -751,7 +756,7 @@ namespace Travellour.Data.Migrations
                 {
                     b.HasOne("Travellour.Core.Entities.Group", "Group")
                         .WithMany("GroupPosts")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId1");
 
                     b.HasOne("Travellour.Core.Entities.AppUser", "User")
                         .WithMany("Posts")
