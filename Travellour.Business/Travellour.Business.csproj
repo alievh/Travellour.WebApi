@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\CommentDTO\" />
     <Folder Include="DTOs\FriendDTO\" />
     <Folder Include="DTOs\LikeDTO\" />
     <Folder Include="DTOs\NotificationDTO\" />

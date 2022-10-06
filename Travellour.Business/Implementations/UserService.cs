@@ -128,10 +128,11 @@ public class UserService : IUserService
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == id && u.FriendId == userId) || (u.FriendId == id && u.UserId == userId));
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => (u.UserId == userId && u.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (u.FriendId == userId && u.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
         userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
         userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
         userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;
-        userProfileDto.FriendCount = user.Friends is null ? 0 : user.Friends.Count;
+        userProfileDto.FriendCount = userFriends is null ? 0 : userFriends.Count;
         if(userFriend is not null)
         {
             userProfileDto.Status = Core.Entities.Enum.FriendRequestStatus.Accepted;

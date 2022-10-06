@@ -52,7 +52,7 @@ public class FriendService : IFriendService
     public async Task FriendRemoveAsync(string? friendId)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => n.UserId == userId && n.FriendId == friendId);
+        UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => (n.UserId == userId && n.FriendId == friendId) || (n.UserId == friendId && n.FriendId == userId));
         if (userFriend is null)
         {
             throw new NullReferenceException();
@@ -108,7 +108,7 @@ public class FriendService : IFriendService
     public async Task<List<UserGetDto>> FriendGetAllAsync()
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.FriendId == userId || n.UserId == userId && n.Status == FriendRequestStatus.Accepted, "User.ProfileImage", "Friend.ProfileImage");
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted), "User.ProfileImage", "Friend.ProfileImage");
         if (userFriends is null) throw new NullReferenceException();
         List<UserGetDto> userGetDtos = new();
         foreach (var userFriend in userFriends)

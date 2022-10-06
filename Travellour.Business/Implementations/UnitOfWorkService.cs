@@ -40,7 +40,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public IUserService UserService => _userService ??= new UserService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment, _userManager);
 
-    public ICommentService CommentService => _commentService ??= new CommentService();
+    public ICommentService CommentService => _commentService ??= new CommentService(_unitOfWork, _httpContextAccessor, _mapper);
 
     public IForumService ForumService => _forumService ??= new ForumService(_unitOfWork, _mapper, _httpContextAccessor);
 

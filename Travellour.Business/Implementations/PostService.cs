@@ -33,7 +33,7 @@ public class PostService : IPostService
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         postDto.LikeCount = post.Likes.Count;
         postDto.CommentCount = post.Comments.Count;
-#pragma warning restore CS8602s // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (post.Images != null)
         {
             List<string> imageUrls = new();
@@ -109,13 +109,18 @@ public class PostService : IPostService
     public async Task DeleteAsync(int id)
     {
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id);
+        List<Image> images = await _unitOfWork.ImageRepository.GetAllAsync(n => n.PostId == id);
+        foreach (var image in images)
+        {
+            await _unitOfWork.ImageRepository.DeleteAsync(image);
+        }
         if (post == null) throw new NullReferenceException();
         await _unitOfWork.PostRepository.DeleteAsync(post);
     }
 
     public async Task<List<PostGetDto>> GetPostByUserIdAsync(string? id)
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.UserId == id, "Images", "Likes", "Comments", "User.ProfileImage", "Group");
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.UserId == id, "Images", "Likes", "Comments.User", "User.ProfileImage", "Group");
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
@@ -137,6 +142,7 @@ public class PostService : IPostService
                 postDtos[i].CommentCount = posts[i].Comments.Count;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
+            posts[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == posts[i].Id, "User.ProfileImage");
         }
         return postDtos;
     }

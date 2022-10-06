@@ -94,6 +94,7 @@ public class GroupService : IGroupService
         List<PostGetDto> postGetDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
         {
+            List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == posts[i].Id, "User.ProfileImage");
             if (posts[i].Images != null)
             {
                 List<string> imageUrls = new();
@@ -111,6 +112,7 @@ public class GroupService : IGroupService
                 postGetDtos[i].CommentCount = posts[i].Comments.Count;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
+            postGetDtos[i].Comments = comments;
         }
         return postGetDtos;
     }
