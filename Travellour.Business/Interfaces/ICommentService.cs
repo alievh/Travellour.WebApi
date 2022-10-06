@@ -7,4 +7,5 @@ public interface ICommentService
 {
     Task CreateCommentAsync(CommentCreateDto commentCreateDto);
     Task<List<CommentGetDto>> GetCommentsAsync(int id);
+    Task DeleteCommentAsync(int id);
 }

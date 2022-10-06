@@ -31,6 +31,13 @@ public class CommentService : ICommentService
         await _unitOfWork.CommentRepository.CreateAsync(comment);
     }
 
+    public async Task DeleteCommentAsync(int id)
+    {
+        Comment comment = await _unitOfWork.CommentRepository.GetAsync(u => u.Id == id);
+        if (comment == null) throw new NullReferenceException();
+        await _unitOfWork.CommentRepository.DeleteAsync(comment);
+    }
+
     public async Task<List<CommentGetDto>> GetCommentsAsync(int id)
     {
         List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == id, "User.ProfileImage");

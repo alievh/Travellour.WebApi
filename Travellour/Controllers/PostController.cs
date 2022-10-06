@@ -127,4 +127,18 @@ public class PostController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPut("commentdelete/{id}")]
+    public async Task<ActionResult> CommentDeleteAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.CommentService.DeleteCommentAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Comment deleted succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }
