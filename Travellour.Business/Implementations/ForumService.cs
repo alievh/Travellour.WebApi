@@ -26,6 +26,8 @@ public class ForumService : IForumService
         Forum forum = await _unitOfWork.ForumRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "User", "Likes", "Comments");
         if (forum is null) throw new NullReferenceException();
         ForumGetDto forumGetDto = _mapper.Map<ForumGetDto>(forum);
+        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.ForumId == id, "User.ProfileImage");
+        forumGetDto.Comments = comments;
         return forumGetDto;
     }
 

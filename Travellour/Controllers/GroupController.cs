@@ -84,4 +84,18 @@ public class GroupController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPost("GroupJoin/{id}")]
+    public async Task<ActionResult> GroupJoinAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.JoinGroupAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

@@ -8,4 +8,5 @@ public class ForumGetDto
     public string? ForumTitle { get; set; }
     public string? ForumContent { get; set; }
     public int CommentCount { get; set; }
+    public ICollection<Comment>? Comments { get; set; }
 }

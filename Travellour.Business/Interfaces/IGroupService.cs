@@ -10,4 +10,5 @@ public interface IGroupService
     Task CreateAsync(GroupCreateDto groupCreateDto);
     Task<GroupProfileDto> GetGroupProfileAsync(int id);
     Task<List<PostGetDto>> GetAllGroupPostAsync(int id);
+    Task JoinGroupAsync(int id);
 }

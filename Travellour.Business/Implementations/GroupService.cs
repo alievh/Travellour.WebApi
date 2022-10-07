@@ -80,10 +80,10 @@ public class GroupService : IGroupService
         {
             groupProfileDto.GroupImage = group.Image?.ImageUrl;
         }
-        #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         groupProfileDto.MemberCount = group.GroupMembers.Count;
         groupProfileDto.PostCount = group.GroupPosts.Count;
-        #pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         return groupProfileDto;
     }
 
@@ -115,5 +115,15 @@ public class GroupService : IGroupService
             postGetDtos[i].Comments = comments;
         }
         return postGetDtos;
+    }
+
+    public async Task JoinGroupAsync(int id)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == id, "GroupMembers");
+        if (group == null) throw new NullReferenceException();
+        group.GroupMembers?.Add(appUser);
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
 }

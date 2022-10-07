@@ -38,7 +38,14 @@ public class CommentService : ICommentService
         await _unitOfWork.CommentRepository.DeleteAsync(comment);
     }
 
-    public async Task<List<CommentGetDto>> GetCommentsAsync(int id)
+    public async Task<List<CommentGetDto>> GetForumCommentsAsync(int id)
+    {
+        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.ForumId == id, "User.ProfileImage");
+        List<CommentGetDto> commentGetDtos = _mapper.Map<List<CommentGetDto>>(comments);
+        return commentGetDtos;
+    }
+
+    public async Task<List<CommentGetDto>> GetPostCommentsAsync(int id)
     {
         List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == id, "User.ProfileImage");
         List<CommentGetDto> commentGetDtos = _mapper.Map<List<CommentGetDto>>(comments);
