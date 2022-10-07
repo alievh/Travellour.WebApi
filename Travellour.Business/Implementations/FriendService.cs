@@ -128,4 +128,15 @@ public class FriendService : IFriendService
         }
         return userGetDtos;
     }
+
+    public async Task CancelFriendRequestAsync(string? friendId)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => (n.UserId == userId && n.Status == FriendRequestStatus.Pending) || (n.FriendId == friendId && n.Status == FriendRequestStatus.Pending));
+        if (userFriend is null)
+        {
+            throw new NullReferenceException();
+        }
+        await _unitOfWork.FriendRepository.DeleteAsync(userFriend);
+    }
 }

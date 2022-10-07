@@ -112,4 +112,18 @@ public class FriendController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpPut("FriendRequestCancel/{id}")]
+    public async Task<ActionResult> FriendRequestCancel(string? friendId)
+    {
+        try
+        {
+            await _unitOfWorkService.FriendService.CancelFriendRequestAsync(friendId);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Requested succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

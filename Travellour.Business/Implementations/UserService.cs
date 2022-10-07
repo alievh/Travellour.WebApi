@@ -9,6 +9,7 @@ using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
+using Travellour.Core.Entities.Enum;
 
 namespace Travellour.Business.Implementations;
 
@@ -128,17 +129,25 @@ public class UserService : IUserService
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == id && u.FriendId == userId) || (u.FriendId == id && u.UserId == userId));
-        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => (u.UserId == userId && u.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (u.FriendId == userId && u.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => (u.UserId == userId && u.Status == FriendRequestStatus.Accepted) || (u.FriendId == userId && u.Status == FriendRequestStatus.Accepted));
         userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
         userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
         userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;
         userProfileDto.FriendCount = userFriends is null ? 0 : userFriends.Count;
-        if(userFriend is not null)
+        if (userFriend is null)
         {
-            userProfileDto.Status = Core.Entities.Enum.FriendRequestStatus.Accepted;
-        } else if (userFriend is null)
+            userProfileDto.Status = FriendRequestStatus.NotFriend;
+        }
+        else if (userFriend.UserId == userId && userFriend.Status != FriendRequestStatus.Accepted)
         {
-            userProfileDto.Status = Core.Entities.Enum.FriendRequestStatus.NotFriend;
+            userProfileDto.Status = FriendRequestStatus.Pending;
+        }else if (userFriend.FriendId == userId && userFriend.Status != FriendRequestStatus.Accepted)
+        {
+            userProfileDto.Status = FriendRequestStatus.Declined;
+        }
+        else if (userFriend.Status == FriendRequestStatus.Accepted)
+        {
+            userProfileDto.Status = FriendRequestStatus.Accepted;
         }
         return userProfileDto;
     }
