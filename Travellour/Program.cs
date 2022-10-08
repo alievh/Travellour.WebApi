@@ -13,6 +13,7 @@ using Travellour.Core;
 using Travellour.Core.Entities;
 using Travellour.Data;
 using Travellour.Data.DAL;
+using Travellour.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +27,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigins",
         builder => builder.WithOrigins("http://localhost:3000").WithMethods("PUT", "DELETE", "GET"));
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -81,14 +85,6 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-app.UseCors(x => x
-    .WithOrigins("http://localhost:3000")
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials()
-    .SetIsOriginAllowed(origin => true)
-);
-
 
 
 
@@ -105,11 +101,26 @@ app.UseStaticFiles(new StaticFileOptions()
     RequestPath = "/img"
 });
 
+app.UseRouting();
+
+app.UseCors(x => x
+    .WithOrigins("http://localhost:3000")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .SetIsOriginAllowed(origin => true)
+);
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<OnlineHub>("/onlinehub");
+});
 
 app.MapControllers();
 
