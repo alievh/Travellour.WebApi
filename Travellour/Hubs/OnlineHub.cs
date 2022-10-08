@@ -18,5 +18,17 @@ namespace Travellour.Hubs
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             await Clients.All.SendAsync("activeUser", OnlineUserSource.OnlineUsers);
         }
+
+        public async Task IsOffline(string id)
+        {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            bool exist = OnlineUserSource.OnlineUsers.Exists(n => n == id);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            if (exist)
+            {
+                OnlineUserSource.OnlineUsers?.Remove(id);
+            }
+            await Clients.All.SendAsync("activeUser", OnlineUserSource.OnlineUsers);
+        }
     }
 }
