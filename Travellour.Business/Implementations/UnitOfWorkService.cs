@@ -52,7 +52,7 @@ public class UnitOfWorkService : IUnitOfWorkService
 
     public ILikeService LikeService => _likeService ??= new LikeService(_unitOfWork, _httpContextAccessor);
 
-    public INotificationService NotificationService => _notificationService ??= new NotificationService();
+    public INotificationService NotificationService => _notificationService ??= new NotificationService(_unitOfWork, _httpContextAccessor, _mapper);
 
     public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 

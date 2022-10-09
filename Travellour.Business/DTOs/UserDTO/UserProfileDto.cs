@@ -1,6 +1,4 @@
-﻿using Travellour.Business.DTOs.PostDTO;
-using Travellour.Core.Entities;
-using Travellour.Core.Entities.Enum;
+﻿using Travellour.Core.Entities.Enum;
 
 namespace Travellour.Business.DTOs.UserDTO;
 

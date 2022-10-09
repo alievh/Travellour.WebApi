@@ -3,6 +3,7 @@ using Travellour.Business.DTOs.CommentDTO;
 using Travellour.Business.DTOs.EventDTO;
 using Travellour.Business.DTOs.ForumDTO;
 using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.NotificationDTO;
 using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.DTOs.UserDTO;
 using Travellour.Core.Entities;
@@ -41,5 +42,7 @@ public class Mapper : Profile
         CreateMap<ForumCreateDto, Forum>();
         CreateMap<CommentCreateDto, Comment>();
         CreateMap<Comment, CommentGetDto>();
+        CreateMap<NotificationCreateDto, Notification>();
+        CreateMap<Notification, NotificationGetDto>();
     }
 }
