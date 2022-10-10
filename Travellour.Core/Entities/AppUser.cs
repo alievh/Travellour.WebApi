@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
 using Travellour.Core.Entities.Base;
 using Travellour.Core.Entities.Enum;
 

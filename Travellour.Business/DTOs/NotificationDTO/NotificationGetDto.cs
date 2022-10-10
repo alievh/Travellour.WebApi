@@ -8,6 +8,6 @@ public class NotificationGetDto
     public int Id { get; set; }
     public string? Message { get; set; }
     public AppUser? Sender { get; set; }
-    public NotificationStatus notificationStatus { get; set; }
+    public NotificationStatus NotificationStatus { get; set; }
     public Post? Post { get; set; }
 }

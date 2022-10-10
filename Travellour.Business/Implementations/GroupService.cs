@@ -40,7 +40,7 @@ public class GroupService : IGroupService
 
     public async Task<List<GroupGetDto>> GetAllAsyn()
     {
-        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(includes: "Image");
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n=> !n.IsDeleted,"Image");
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
         for (int i = 0; i < groups.Count; i++)
@@ -89,12 +89,12 @@ public class GroupService : IGroupService
 
     public async Task<List<PostGetDto>> GetAllGroupPostAsync(int id)
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.GroupId == id, "Group", "User.ProfileImage", "Images", "Likes", "Comments");
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == id, "Group", "User.ProfileImage", "Images", "Likes", "Comments");
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postGetDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
         {
-            List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == posts[i].Id, "User.ProfileImage");
+            List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
             if (posts[i].Images != null)
             {
                 List<string> imageUrls = new();

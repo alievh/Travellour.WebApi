@@ -27,13 +27,13 @@ public class Repository<TEntity> : IRepository<TEntity>
 #pragma warning restore CS8603 // Possible null reference return.
     }
 
-    public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, params string[] includes)
+    public async Task<List<TEntity>> GetAllAsync<TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy, Expression<Func<TEntity, bool>>? predicate = null, params string[] includes)
     {
         var query = GetQuery(includes);
 
         return predicate is null
-            ? await query.ToListAsync()
-            : await query.Where(predicate).ToListAsync();
+            ? await query.OrderByDescending(orderBy).ToListAsync()
+            : await query.OrderByDescending(orderBy).Where(predicate).ToListAsync();
     }
 
     public async Task CreateAsync(TEntity entity)

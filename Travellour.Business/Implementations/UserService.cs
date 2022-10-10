@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.DTOs.UserDTO;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
@@ -39,7 +38,7 @@ public class UserService : IUserService
         {
             throw new NullReferenceException();
         }
-        List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.ReceiverId == id && n.NotificationStatus == NotificationStatus.UnChecked);
+        List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.ReceiverId == id && n.NotificationStatus == NotificationStatus.UnChecked);
         UserGetDto userDto = _mapper.Map<UserGetDto>(appUser);
         userDto.ProfileImage = appUser.ProfileImage is not null ? appUser.ProfileImage.ImageUrl : "";
         userDto.CoverImage = appUser.CoverImage is not null ? appUser.CoverImage.ImageUrl : "";
@@ -74,7 +73,6 @@ public class UserService : IUserService
 
         await _userManager.UpdateAsync(appUser);
     }
-
     
 
     public async Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto)
@@ -130,7 +128,7 @@ public class UserService : IUserService
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == id && u.FriendId == userId) || (u.FriendId == id && u.UserId == userId));
-        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => (u.UserId == userId && u.Status == FriendRequestStatus.Accepted) || (u.FriendId == userId && u.Status == FriendRequestStatus.Accepted));
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => u.Id, u => (u.UserId == id && u.Status == FriendRequestStatus.Accepted) || (u.FriendId == id && u.Status == FriendRequestStatus.Accepted));
         userProfileDto.ProfileImage = user.ProfileImage is not null ? user.ProfileImage.ImageUrl : "";
         userProfileDto.CoverImage = user.CoverImage is not null ? user.CoverImage.ImageUrl : "";
         userProfileDto.PostCount = user.Posts is null ? 0 : user.Posts.Count;

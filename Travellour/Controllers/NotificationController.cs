@@ -45,12 +45,12 @@ public class NotificationController : Controller
         }
     }
 
-    [HttpPost("notificationChangeStatus")]
-    public async Task<ActionResult> NotificationChangeStatusAsync()
+    [HttpPost("notificationChangeStatus/{id}")]
+    public async Task<ActionResult> NotificationChangeStatusAsync(int id)
     {
         try
         {
-            await _unitOfWorkService.NotificationService.ChangeNotificationSatatusAsync();
+            await _unitOfWorkService.NotificationService.ChangeNotificationSatatusAsync(id);
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
         }
         catch (Exception ex)

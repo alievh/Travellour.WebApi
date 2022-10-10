@@ -27,7 +27,7 @@ public class EventService : IEventService
 
     public async Task<List<EventGetDto>> GetAllAsync()
     {
-        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => !n.IsDeleted, "Images");
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "Images");
         if (events is null) throw new NullReferenceException();
         List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);
         for (int i = 0; i < events.Count; i++)

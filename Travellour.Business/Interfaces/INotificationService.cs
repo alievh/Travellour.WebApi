@@ -6,5 +6,5 @@ public interface INotificationService
 {
     Task<List<NotificationGetDto>> GetAllNotificationAsync();
     Task CreateNotificationAsync(NotificationCreateDto notificationCreateDto);
-    Task ChangeNotificationSatatusAsync();
+    Task ChangeNotificationSatatusAsync(int id);
 }

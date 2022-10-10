@@ -28,6 +28,7 @@ public class CommentService : ICommentService
         Comment comment = _mapper.Map<Comment>(commentCreateDto);
         comment.UserId = userId;
         comment.User = appUser;
+        comment.CreateDate = DateTime.UtcNow.AddHours(4);
         await _unitOfWork.CommentRepository.CreateAsync(comment);
     }
 
@@ -40,14 +41,14 @@ public class CommentService : ICommentService
 
     public async Task<List<CommentGetDto>> GetForumCommentsAsync(int id)
     {
-        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.ForumId == id, "User.ProfileImage");
+        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.ForumId == id, "User.ProfileImage");
         List<CommentGetDto> commentGetDtos = _mapper.Map<List<CommentGetDto>>(comments);
         return commentGetDtos;
     }
 
     public async Task<List<CommentGetDto>> GetPostCommentsAsync(int id)
     {
-        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == id, "User.ProfileImage");
+        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == id, "User.ProfileImage");
         List<CommentGetDto> commentGetDtos = _mapper.Map<List<CommentGetDto>>(comments);
         return commentGetDtos;
     }
