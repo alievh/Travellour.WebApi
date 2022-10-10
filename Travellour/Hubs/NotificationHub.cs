@@ -4,8 +4,7 @@ namespace Travellour.Hubs;
 
 public class NotificationHub : Hub
 {
-    public async Task Like()
+    public async Task SendNotification(string id)
     {
-
     }
 }

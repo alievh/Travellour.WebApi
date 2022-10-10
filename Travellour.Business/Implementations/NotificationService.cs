@@ -32,12 +32,16 @@ public class NotificationService : INotificationService
     public async Task CreateNotificationAsync(NotificationCreateDto notificationCreateDto)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
-        Notification notification = _mapper.Map<Notification>(notificationCreateDto);
-        notification.SenderId = userId;
-        notification.Post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == notificationCreateDto.PostId, "Images");
-        notification.NotificationStatus = Core.Entities.Enum.NotificationStatus.UnChecked;
-        await _unitOfWork.NotificationRepository.CreateAsync(notification);
+        Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == notificationCreateDto.PostId, "Images");
+        Notification checkNotification = await _unitOfWork.NotificationRepository.GetAsync(n => n.SenderId == userId && n.Post == post && n.ReceiverId == notificationCreateDto.ReceiverId && n.Message == "liked your");
+        if (checkNotification == null)
+        {
+            Notification notification = _mapper.Map<Notification>(notificationCreateDto);
+            notification.SenderId = userId;
+            notification.Post = post;
+            notification.NotificationStatus = Core.Entities.Enum.NotificationStatus.UnChecked;
+            await _unitOfWork.NotificationRepository.CreateAsync(notification);
+        }
     }
 
     public async Task ChangeNotificationSatatusAsync()

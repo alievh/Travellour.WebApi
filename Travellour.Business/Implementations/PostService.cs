@@ -30,6 +30,7 @@ public class PostService : IPostService
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id, "User.ProfileImage", "Likes", "Comments", "Images", "Group");
         if (post is null) throw new NullReferenceException();
         PostGetDto postDto = _mapper.Map<PostGetDto>(post);
+        postDto.Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.PostId == id, "User.ProfileImage");
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         postDto.LikeCount = post.Likes.Count;
         postDto.CommentCount = post.Comments.Count;
