@@ -28,24 +28,42 @@ public class GroupService : IGroupService
 
     public async Task<GroupGetDto> GetAsync(int id)
     {
-        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "Image");
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "ProfileImage", "CoverImage");
         if (group is null) throw new NullReferenceException();
         GroupGetDto groupGetDto = _mapper.Map<GroupGetDto>(group);
-        if (group.Image is not null)
+        if (group.ProfileImage is not null)
         {
-            groupGetDto.GroupImage = group.Image?.ImageUrl;
+            groupGetDto.ProfileImage = group.ProfileImage?.ImageUrl;
+        }
+        if (group.CoverImage is not null)
+        {
+            groupGetDto.CoverImage = group.CoverImage?.ImageUrl;
         }
         return groupGetDto;
     }
 
     public async Task<List<GroupGetDto>> GetAllAsyn()
     {
-        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n=> !n.IsDeleted,"Image");
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
         for (int i = 0; i < groups.Count; i++)
         {
-            groupGetDtos[i].GroupImage = groups[i].Image?.ImageUrl;
+            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
+            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
+        }
+        return groupGetDtos;
+    }
+
+    public async Task<List<GroupGetDto>> GetMyGroupsAsync(string id)
+    {
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupAdminId == id, "ProfileImage");
+        if (groups is null) throw new NullReferenceException();
+        List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
+            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
         }
         return groupGetDtos;
     }
@@ -58,27 +76,36 @@ public class GroupService : IGroupService
         group.CreateDate = DateTime.UtcNow.AddHours(4);
         group.GroupAdminId = userId;
         group.GroupAdmin = appUser;
-        if (groupCreateDto.ImageFile != null)
-        {
-            Image image = new()
-            {
-                ImageUrl = await groupCreateDto.ImageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
-            };
-            await _unitOfWork.ImageRepository.CreateAsync(image);
-            group.ImageId = image.Id;
-            group.Image = image;
-        };
         await _unitOfWork.GroupRepository.CreateAsync(group);
+    }
+
+    public async Task ChangeGroupAsync(GroupUpdateDto groupUpdateDto)
+    {
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == groupUpdateDto.Id);
+        if (groupUpdateDto.GroupName?.Trim() == "" && groupUpdateDto.GroupDescription?.Trim() == "") throw new NullReferenceException();
+        if(groupUpdateDto.GroupName != null && groupUpdateDto.GroupName.Trim() != "")
+        {
+            group.GroupName = groupUpdateDto.GroupName;
+        }
+        if(groupUpdateDto.GroupDescription != null && groupUpdateDto.GroupDescription.Trim() != "")
+        {
+            group.GroupDescription = groupUpdateDto.GroupDescription;
+        }
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
 
     public async Task<GroupProfileDto> GetGroupProfileAsync(int id)
     {
-        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin.ProfileImage", "GroupMembers", "Image", "GroupPosts");
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin.ProfileImage", "GroupMembers", "ProfileImage", "CoverImage", "GroupPosts");
         if (group is null) throw new NullReferenceException();
         GroupProfileDto groupProfileDto = _mapper.Map<GroupProfileDto>(group);
-        if (group.Image is not null)
+        if (group.ProfileImage is not null)
         {
-            groupProfileDto.GroupImage = group.Image?.ImageUrl;
+            groupProfileDto.ProfileImage = group.ProfileImage?.ImageUrl;
+        }
+        if (group.CoverImage is not null)
+        {
+            groupProfileDto.CoverImage = group.CoverImage?.ImageUrl;
         }
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         groupProfileDto.MemberCount = group.GroupMembers.Count;
@@ -126,4 +153,57 @@ public class GroupService : IGroupService
         group.GroupMembers?.Add(appUser);
         await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
+
+    public async Task LeaveGroupAsync(int id)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == id, "GroupMembers");
+        if (group == null) throw new NullReferenceException();
+        group.GroupMembers?.Remove(appUser);
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
+    }
+
+    public async Task KickUserFromGroupAsync(string userId, int groupId)
+    {
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        if (appUser is null) throw new NullReferenceException();
+        Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == groupId, "GroupMembers");
+        if (group is null) throw new NullReferenceException();
+        group.GroupMembers?.Remove(appUser);
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
+    }
+
+    public async Task ChangeGroupPhotoAsync(int id, GroupPhotoDto groupPhotoDto)
+    {
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id, "ProfileImage");
+#pragma warning disable CS8604 // Possible null reference argument.
+        var image = new Image
+        {
+            ImageUrl = await groupPhotoDto.ImageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
+        };
+#pragma warning restore CS8604 // Possible null reference argument.
+        await _unitOfWork.ImageRepository.CreateAsync(image);
+        group.ProfileImage = image;
+        group.ProfileImageId = image.Id;
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
+    }
+
+    public async Task ChangeGroupCoverAsync(int id, GroupCoverDto groupCoverDto)
+    {
+        Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id, "CoverImage");
+
+#pragma warning disable CS8604 // Possible null reference argument.
+        var image = new Image
+        {
+            ImageUrl = await groupCoverDto.ImageFile.FileSaveAsync(_hostEnvironment.ContentRootPath, "Images")
+        };
+#pragma warning restore CS8604 // Possible null reference argument.
+        await _unitOfWork.ImageRepository.CreateAsync(image);
+        group.CoverImage = image;
+        group.CoverImageId = image.Id;
+        await _unitOfWork.GroupRepository.UpdateAsync(group);
+    }
+
+    
 }

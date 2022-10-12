@@ -46,7 +46,6 @@ public class NotificationService : INotificationService
             Notification checkNotification = await _unitOfWork.NotificationRepository.GetAsync(n => n.SenderId == userId && n.Post == post && n.ReceiverId == notificationCreateDto.ReceiverId && n.Message == "liked your");
             if (checkNotification == null)
             {
-
                 Notification notification = _mapper.Map<Notification>(notificationCreateDto);
                 notification.SenderId = userId;
                 notification.Post = post;
@@ -64,6 +63,4 @@ public class NotificationService : INotificationService
         notification.NotificationStatus = Core.Entities.Enum.NotificationStatus.Checked;
         await _unitOfWork.NotificationRepository.UpdateAsync(notification);
     }
-
-
 }

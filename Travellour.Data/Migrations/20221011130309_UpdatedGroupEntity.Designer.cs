@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221011130309_UpdatedGroupEntity")]
+    partial class UpdatedGroupEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace Travellour.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("AppUserGroup", b =>
-                {
-                    b.Property<string>("GroupMembersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("JoinedGroupsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GroupMembersId", "JoinedGroupsId");
-
-                    b.HasIndex("JoinedGroupsId");
-
-                    b.ToTable("AppUserGroup");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -207,6 +194,9 @@ namespace Travellour.Data.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
 
@@ -256,6 +246,8 @@ namespace Travellour.Data.Migrations
                     b.HasIndex("CoverImageId");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -594,21 +586,6 @@ namespace Travellour.Data.Migrations
                     b.ToTable("UserFriends");
                 });
 
-            modelBuilder.Entity("AppUserGroup", b =>
-                {
-                    b.HasOne("Travellour.Core.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("GroupMembersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Travellour.Core.Entities.Group", null)
-                        .WithMany()
-                        .HasForeignKey("JoinedGroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -674,6 +651,10 @@ namespace Travellour.Data.Migrations
                         .WithMany("EventMembers")
                         .HasForeignKey("EventId");
 
+                    b.HasOne("Travellour.Core.Entities.Group", null)
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("Travellour.Core.Entities.Image", "ProfileImage")
                         .WithMany()
                         .HasForeignKey("ProfileImageId");
@@ -733,7 +714,7 @@ namespace Travellour.Data.Migrations
                         .HasForeignKey("CoverImageId");
 
                     b.HasOne("Travellour.Core.Entities.AppUser", "GroupAdmin")
-                        .WithMany("OwnedGroups")
+                        .WithMany("Groups")
                         .HasForeignKey("GroupAdminId");
 
                     b.HasOne("Travellour.Core.Entities.Image", "ProfileImage")
@@ -842,9 +823,9 @@ namespace Travellour.Data.Migrations
 
                     b.Navigation("Friends");
 
-                    b.Navigation("Notifications");
+                    b.Navigation("Groups");
 
-                    b.Navigation("OwnedGroups");
+                    b.Navigation("Notifications");
 
                     b.Navigation("Posts");
 
@@ -872,6 +853,8 @@ namespace Travellour.Data.Migrations
 
             modelBuilder.Entity("Travellour.Core.Entities.Group", b =>
                 {
+                    b.Navigation("GroupMembers");
+
                     b.Navigation("GroupPosts");
                 });
 

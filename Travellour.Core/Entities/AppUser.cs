@@ -21,5 +21,6 @@ public class AppUser : IdentityUser, IEntity
     public ICollection<UserFriend>? UserFriends { get; set; }
     public ICollection<Event>? Events { get; set; }
     public ICollection<Forum>? Forums { get; set; }
-    public ICollection<Group>? Groups { get; set; }
+    public ICollection<Group>? OwnedGroups { get; set; }
+    public ICollection<Group>? JoinedGroups { get; set; }
 }

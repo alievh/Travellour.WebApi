@@ -45,8 +45,21 @@ public class GroupController : Controller
         }
     }
 
+    [HttpGet("MyGroupGet/{id}")]
+    public async Task<ActionResult<List<GroupGetDto>>> MyGroupGetAsync(string id)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.GroupService.GetMyGroupsAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
     [HttpPost("GroupCreate")]
-    public async Task<ActionResult> GroupCreateAsync([FromForm] GroupCreateDto groupCreateDto)
+    public async Task<ActionResult> GroupCreateAsync(GroupCreateDto groupCreateDto)
     {
         try
         {
@@ -92,6 +105,76 @@ public class GroupController : Controller
         {
             await _unitOfWorkService.GroupService.JoinGroupAsync(id);
             return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("GroupLeave/{id}")]
+    public async Task<ActionResult> GroupLeaveAsync(int id)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.LeaveGroupAsync(id);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("GroupKick/{userId}/{groupId}")]
+    public async Task<ActionResult> GroupLeaveAsync(string userId, int groupId)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.KickUserFromGroupAsync(userId, groupId);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Group created succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("changeGroupPhoto/{id}")]
+    public async Task<ActionResult> ChangeProfilePhoto(int id,[FromForm] GroupPhotoDto groupPhotoDto)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.ChangeGroupPhotoAsync(id, groupPhotoDto);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("changeGroupCover/{id}")]
+    public async Task<ActionResult> ChangeCoverPhoto(int id, [FromForm] GroupCoverDto groupCoverDto)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.ChangeGroupCoverAsync(id, groupCoverDto);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
+    [HttpPost("GroupChange")]
+    public async Task<ActionResult> GroupUpdateAsync(GroupUpdateDto groupUpdateDto)
+    {
+        try
+        {
+            await _unitOfWorkService.GroupService.ChangeGroupAsync(groupUpdateDto);
+            return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Image updated succesfully!" });
         }
         catch (Exception ex)
         {
