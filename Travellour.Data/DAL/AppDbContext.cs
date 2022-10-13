@@ -23,7 +23,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
     {
         modelBuilder.Entity<AppUser>().HasMany(u => u.UserFriends).WithOne(uf => uf.User).HasForeignKey(uf => uf.UserId);
         modelBuilder.Entity<AppUser>().HasMany(u => u.Notifications).WithOne(uf => uf.Receiver).HasForeignKey(uf => uf.ReceiverId);
-        modelBuilder.Entity<AppUser>().HasMany(u => u.Events).WithOne(uf => uf.EventCreator).HasForeignKey(uf => uf.EventCreatorId);
+        modelBuilder.Entity<AppUser>().HasMany(u => u.OwnedEvents).WithOne(uf => uf.EventCreator).HasForeignKey(uf => uf.EventCreatorId);
+        modelBuilder.Entity<AppUser>().HasMany(u => u.JoinedEvents).WithMany(uf => uf.EventMembers);
         modelBuilder.Entity<AppUser>().HasMany(u => u.OwnedGroups).WithOne(uf => uf.GroupAdmin).HasForeignKey(uf => uf.GroupAdminId);
         modelBuilder.Entity<AppUser>().HasMany(u => u.JoinedGroups).WithMany(uf => uf.GroupMembers);
         base.OnModelCreating(modelBuilder);

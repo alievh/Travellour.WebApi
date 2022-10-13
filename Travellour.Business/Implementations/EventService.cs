@@ -27,7 +27,35 @@ public class EventService : IEventService
 
     public async Task<List<EventGetDto>> GetAllAsync()
     {
-        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "Images");
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "Images", "EventMembers");
+        if (events is null) throw new NullReferenceException();
+        List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);
+        for (int i = 0; i < events.Count; i++)
+        {
+            if (events[i].Images != null)
+            {
+                List<string> imageUrls = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var image in events[i].Images)
+                {
+#pragma warning disable CS8604 // Possible null reference argument.
+                    imageUrls.Add(image.ImageUrl);
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                eventGetDtos[i].ImageUrls = imageUrls;
+            }
+        }
+        return eventGetDtos;
+    }
+
+    public async Task<List<EventGetDto>> GetJoinedEventsAsync()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => n.EventMembers.Contains(appUser), "Images", "EventMembers");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (events is null) throw new NullReferenceException();
         List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);
         for (int i = 0; i < events.Count; i++)
@@ -73,4 +101,26 @@ public class EventService : IEventService
         }
         await _unitOfWork.EventRepository.CreateAsync(eventDb);
     }
+
+    public async Task JoinEventAsync(int id)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "EventMembers");
+        eventDb.EventMembers?.Add(appUser);
+
+        await _unitOfWork.EventRepository.UpdateAsync(eventDb);
+    }
+
+    public async Task LeaveEventAsync(int id)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "EventMembers");
+        eventDb.EventMembers?.Remove(appUser);
+
+        await _unitOfWork.EventRepository.UpdateAsync(eventDb);
+    }
+
+    
 }
