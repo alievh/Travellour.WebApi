@@ -74,6 +74,7 @@ public class PostService : IPostService
                 postsDto[i].LikeCount = posts[i].Likes.Count;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
+            postsDto[i].FromCreateDate = posts[i].CreateDate.GetTimeBetween();
         }
         return postsDto;
     }
@@ -148,7 +149,9 @@ public class PostService : IPostService
                 postDtos[i].CommentCount = posts[i].Comments.Count;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
-            posts[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
+            postDtos[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
+            postDtos[i].FromCreateDate = posts[i].CreateDate.GetTimeBetween();
+
         }
         return postDtos;
     }

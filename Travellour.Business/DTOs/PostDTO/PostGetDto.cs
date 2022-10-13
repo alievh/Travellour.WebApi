@@ -12,4 +12,5 @@ public class PostGetDto
     public int CommentCount { get; set; }
     public ICollection<Comment>? Comments { get; set; }
     public List<string>? ImageUrls { get; set; }
+    public string? FromCreateDate { get; set; }
 }

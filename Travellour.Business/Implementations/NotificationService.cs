@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Travellour.Business.DTOs.NotificationDTO;
+using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -26,6 +27,10 @@ public class NotificationService : INotificationService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.ReceiverId == userId, "Sender.ProfileImage", "Post");
         List<NotificationGetDto> notificationGetDtos = _mapper.Map<List<NotificationGetDto>>(notifications);
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            notificationGetDtos[i].FromCreateDate = notifications[i].CreateDate.GetTimeBetween();
+        }
         return notificationGetDtos;
     }
 

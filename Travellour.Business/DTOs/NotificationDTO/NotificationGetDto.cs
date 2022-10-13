@@ -10,4 +10,5 @@ public class NotificationGetDto
     public AppUser? Sender { get; set; }
     public NotificationStatus NotificationStatus { get; set; }
     public Post? Post { get; set; }
+    public string? FromCreateDate { get; set; }
 }
