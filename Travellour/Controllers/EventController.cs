@@ -32,6 +32,19 @@ namespace Travellour.Controllers
             }
         }
 
+        [HttpGet("EventSearch/{eventName}")]
+        public async Task<ActionResult<List<EventGetDto>>> EventSearchByName(string eventName)
+        {
+            try
+            {
+                return Ok(await _unitOfWorkService.EventService.SearchEventByName(eventName));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+            }
+        }
+
         [HttpGet("JoinedEventsGet")]
         public async Task<ActionResult<List<EventGetDto>>> JoinedEventsGetAsync()
         {

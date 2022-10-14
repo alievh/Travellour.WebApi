@@ -139,4 +139,31 @@ public class FriendService : IFriendService
         }
         await _unitOfWork.FriendRepository.DeleteAsync(userFriend);
     }
+
+    public async Task<List<UserGetDto>> SearchFriendByUsernameAsync(string username)
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        #pragma warning disable CS8602 // Dereference of a possibly null reference.
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())), "User.ProfileImage", "Friend.ProfileImage");
+        #pragma warning restore CS8602 // Dereference of a possibly null reference.
+        if (userFriends is null) throw new NullReferenceException();
+        List<UserGetDto> userGetDtos = new();
+        foreach (var userFriend in userFriends)
+        {
+            UserGetDto userGetDto = new();
+            if (userFriend.UserId == userId)
+            {
+                userGetDto = _mapper.Map<UserGetDto>(userFriend.Friend);
+                userGetDto.ProfileImage = userFriend.Friend?.ProfileImage?.ImageUrl;
+            }
+            else if (userFriend.FriendId == userId)
+            {
+                userGetDto = _mapper.Map<UserGetDto>(userFriend.User);
+                userGetDto.ProfileImage = userFriend.User?.ProfileImage?.ImageUrl;
+
+            }
+            userGetDtos.Add(userGetDto);
+        }
+        return userGetDtos;
+    }
 }

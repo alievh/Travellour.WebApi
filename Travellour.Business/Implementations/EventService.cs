@@ -122,5 +122,29 @@ public class EventService : IEventService
         await _unitOfWork.EventRepository.UpdateAsync(eventDb);
     }
 
-    
+    public async Task<List<EventGetDto>> SearchEventByName(string eventName)
+    {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => n.EventTitle.ToLower().StartsWith(eventName.Trim().ToLower()), "Images", "EventMembers");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        if (events is null) throw new NullReferenceException();
+        List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);
+        for (int i = 0; i < events.Count; i++)
+        {
+            if (events[i].Images != null)
+            {
+                List<string> imageUrls = new();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var image in events[i].Images)
+                {
+#pragma warning disable CS8604 // Possible null reference argument.
+                    imageUrls.Add(image.ImageUrl);
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                eventGetDtos[i].ImageUrls = imageUrls;
+            }
+        }
+        return eventGetDtos;
+    }
 }

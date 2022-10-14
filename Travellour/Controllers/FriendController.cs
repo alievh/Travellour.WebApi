@@ -126,4 +126,17 @@ public class FriendController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpGet("FriendSearch/{username}")]
+    public async Task<ActionResult<List<UserGetDto>>> FriendSearchByUsernameAsync(string username)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.FriendService.SearchFriendByUsernameAsync(username));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }

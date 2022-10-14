@@ -98,6 +98,19 @@ public class GroupController : Controller
         }
     }
 
+    [HttpGet("GroupSearch/{groupName}")]
+    public async Task<ActionResult<List<PostGetDto>>> GroupSearchByName(string groupName)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.GroupService.SearchGroupByName(groupName));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
     [HttpPost("GroupJoin/{id}")]
     public async Task<ActionResult> GroupJoinAsync(int id)
     {

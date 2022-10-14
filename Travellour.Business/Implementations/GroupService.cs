@@ -205,5 +205,18 @@ public class GroupService : IGroupService
         await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
 
-    
+    public async Task<List<GroupGetDto>> SearchGroupByName(string groupName)
+    {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupName.ToLower().StartsWith(groupName.Trim().ToLower()) , "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        if (groups is null) throw new NullReferenceException();
+        List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
+            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
+        }
+        return groupGetDtos;
+    }
 }

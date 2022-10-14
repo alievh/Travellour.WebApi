@@ -12,4 +12,5 @@ public interface IFriendService
     Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync();
     Task<List<UserGetDto>> FriendGetAllAsync();
     Task CancelFriendRequestAsync(string? friendId);
+    Task<List<UserGetDto>> SearchFriendByUsernameAsync(string username);
 }

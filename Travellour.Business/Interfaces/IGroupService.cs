@@ -7,6 +7,7 @@ public interface IGroupService
 {
     Task<GroupGetDto> GetAsync(int id);
     Task<List<GroupGetDto>> GetAllAsyn();
+    Task<List<GroupGetDto>> SearchGroupByName(string groupName);
     Task<List<GroupGetDto>> GetMyGroupsAsync(string id);
     Task CreateAsync(GroupCreateDto groupCreateDto);
     Task<GroupProfileDto> GetGroupProfileAsync(int id);
