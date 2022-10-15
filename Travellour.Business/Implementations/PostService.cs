@@ -31,10 +31,6 @@ public class PostService : IPostService
         if (post is null) throw new NullReferenceException();
         PostGetDto postDto = _mapper.Map<PostGetDto>(post);
         postDto.Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == id, "User.ProfileImage");
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        postDto.LikeCount = post.Likes.Count;
-        postDto.CommentCount = post.Comments.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (post.Images != null)
         {
             List<string> imageUrls = new();
@@ -51,17 +47,32 @@ public class PostService : IPostService
 
     public async Task<List<PostGetDto>> GetAllAsync()
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n=> n.CreateDate, n => !n.IsDeleted, "User.ProfileImage", "Likes", "Comments", "Images");
-
-        if (posts is null) throw new NullReferenceException();
-        List<PostGetDto> postsDto = _mapper.Map<List<PostGetDto>>(posts);
-        for (int i = 0; i < posts.Count; i++)
+        List<Post> allPosts = new();
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n=> n.Id, n => (n.UserId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (n.FriendId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
+        foreach (var userFriend in userFriends)
         {
-            if (posts[i].Images != null)
+            List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.UserId == userFriend.UserId || n.UserId == userFriend.FriendId, "User.ProfileImage", "Likes", "Comments", "Images");
+            allPosts.AddRange(posts);
+        }
+        AppUser user = await _unitOfWork.UserRepository.GetAsync(n => n.Id == userId, "JoinedGroups");
+        if(user.JoinedGroups != null)
+        {
+            foreach (var group in user.JoinedGroups)
+            {
+                List<Post> groupPosts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == group.Id, "User.ProfileImage", "Likes", "Comments", "Images");
+                allPosts.AddRange(groupPosts);
+            }
+        }
+
+        List<PostGetDto> postsDto = _mapper.Map<List<PostGetDto>>(allPosts);
+        for (int i = 0; i < allPosts.Count; i++)
+        {
+            if (allPosts[i].Images != null)
             {
                 List<string> imageUrls = new();
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                foreach (var image in posts[i].Images)
+                foreach (var image in allPosts[i].Images)
                 {
 #pragma warning disable CS8604 // Possible null reference argument.
                     imageUrls.Add(image.ImageUrl);
@@ -69,12 +80,9 @@ public class PostService : IPostService
                 }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 postsDto[i].ImageUrls = imageUrls;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                postsDto[i].CommentCount = posts[i].Comments.Count;
-                postsDto[i].LikeCount = posts[i].Likes.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
-            postsDto[i].FromCreateDate = posts[i].CreateDate.GetTimeBetween();
+            postsDto[i].FromCreateDate = allPosts[i].CreateDate.GetTimeBetween();
+            postsDto[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == allPosts[i].Id, "User.ProfileImage");
         }
         return postsDto;
     }
@@ -132,7 +140,7 @@ public class PostService : IPostService
 
     public async Task<List<PostGetDto>> GetPostByUserIdAsync(string? id)
     {
-        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.UserId == id, "Images", "Likes", "Comments.User", "User.ProfileImage", "Group");
+        List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.UserId == id, "Images", "Likes", "User.ProfileImage", "Group");
         if (posts is null) throw new NullReferenceException();
         List<PostGetDto> postDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
@@ -149,10 +157,6 @@ public class PostService : IPostService
                 }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 postDtos[i].ImageUrls = imageUrls;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                postDtos[i].LikeCount = posts[i].Likes.Count;
-                postDtos[i].CommentCount = posts[i].Comments.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             postDtos[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
             postDtos[i].FromCreateDate = posts[i].CreateDate.GetTimeBetween();

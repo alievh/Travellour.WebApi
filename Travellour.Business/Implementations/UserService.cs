@@ -38,12 +38,7 @@ public class UserService : IUserService
         {
             throw new NullReferenceException();
         }
-        List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.ReceiverId == id && n.NotificationStatus == NotificationStatus.UnChecked);
         UserGetDto userDto = _mapper.Map<UserGetDto>(appUser);
-        userDto.ProfileImage = appUser.ProfileImage is not null ? appUser.ProfileImage.ImageUrl : "";
-        userDto.CoverImage = appUser.CoverImage is not null ? appUser.CoverImage.ImageUrl : "";
-        userDto.NotificationCount = notifications.Count;
-        
         return userDto;
     }
 

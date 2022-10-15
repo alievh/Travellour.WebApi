@@ -31,14 +31,6 @@ public class GroupService : IGroupService
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "ProfileImage", "CoverImage");
         if (group is null) throw new NullReferenceException();
         GroupGetDto groupGetDto = _mapper.Map<GroupGetDto>(group);
-        if (group.ProfileImage is not null)
-        {
-            groupGetDto.ProfileImage = group.ProfileImage?.ImageUrl;
-        }
-        if (group.CoverImage is not null)
-        {
-            groupGetDto.CoverImage = group.CoverImage?.ImageUrl;
-        }
         return groupGetDto;
     }
 
@@ -47,11 +39,6 @@ public class GroupService : IGroupService
         List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
-        for (int i = 0; i < groups.Count; i++)
-        {
-            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
-            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
-        }
         return groupGetDtos;
     }
 
@@ -60,11 +47,6 @@ public class GroupService : IGroupService
         List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupAdminId == id, "ProfileImage");
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
-        for (int i = 0; i < groups.Count; i++)
-        {
-            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
-            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
-        }
         return groupGetDtos;
     }
 
@@ -99,18 +81,6 @@ public class GroupService : IGroupService
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin.ProfileImage", "GroupMembers", "ProfileImage", "CoverImage", "GroupPosts");
         if (group is null) throw new NullReferenceException();
         GroupProfileDto groupProfileDto = _mapper.Map<GroupProfileDto>(group);
-        if (group.ProfileImage is not null)
-        {
-            groupProfileDto.ProfileImage = group.ProfileImage?.ImageUrl;
-        }
-        if (group.CoverImage is not null)
-        {
-            groupProfileDto.CoverImage = group.CoverImage?.ImageUrl;
-        }
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        groupProfileDto.MemberCount = group.GroupMembers.Count;
-        groupProfileDto.PostCount = group.GroupPosts.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         return groupProfileDto;
     }
 
@@ -121,7 +91,6 @@ public class GroupService : IGroupService
         List<PostGetDto> postGetDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
         {
-            List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
             if (posts[i].Images != null)
             {
                 List<string> imageUrls = new();
@@ -139,7 +108,6 @@ public class GroupService : IGroupService
                 postGetDtos[i].CommentCount = posts[i].Comments.Count;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
-            postGetDtos[i].Comments = comments;
         }
         return postGetDtos;
     }
@@ -212,11 +180,6 @@ public class GroupService : IGroupService
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
-        for (int i = 0; i < groups.Count; i++)
-        {
-            groupGetDtos[i].ProfileImage = groups[i].ProfileImage?.ImageUrl;
-            groupGetDtos[i].CoverImage = groups[i].CoverImage?.ImageUrl;
-        }
         return groupGetDtos;
     }
 }

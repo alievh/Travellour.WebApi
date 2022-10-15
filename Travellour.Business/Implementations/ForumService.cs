@@ -36,12 +36,6 @@ public class ForumService : IForumService
         List<Forum> forums = await _unitOfWork.ForumRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "User", "Likes", "Comments");
         if (forums is null) throw new NullReferenceException();
         List<ForumGetDto> forumGetDto = _mapper.Map<List<ForumGetDto>>(forums);
-        for (int i = 0; i < forums.Count; i++)
-        {
-#       pragma warning disable CS8604 // Possible null reference argument.
-            forumGetDto[i].CommentCount = forums[i].Comments.Count();
-#pragma warning restore CS8604 // Possible null reference argument.
-        }
         return forumGetDto;
     }
 

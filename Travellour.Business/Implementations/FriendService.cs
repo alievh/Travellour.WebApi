@@ -76,7 +76,6 @@ public class FriendService : IFriendService
         foreach (var userFriend in userFriends)
         {
             UserGetDto userGetDto = _mapper.Map<UserGetDto>(userFriend.User);
-            userGetDto.ProfileImage = userFriend.User?.ProfileImage?.ImageUrl;
             userGetDtos.Add(userGetDto);
         }
         return userGetDtos;
@@ -97,11 +96,6 @@ public class FriendService : IFriendService
             }
         }
         List<FriendSuggestionDto> friendSuggestionDtos = _mapper.Map<List<FriendSuggestionDto>>(notFriends);
-        for (int i = 0; i < notFriends.Count; i++)
-        {
-            friendSuggestionDtos[i].ImageUrl = notFriends[i].ProfileImage?.ImageUrl;
-        }
-
         return friendSuggestionDtos;
     }
 
@@ -117,12 +111,9 @@ public class FriendService : IFriendService
             if (userFriend.UserId == userId)
             {
                 userGetDto = _mapper.Map<UserGetDto>(userFriend.Friend);
-                userGetDto.ProfileImage = userFriend.Friend?.ProfileImage?.ImageUrl;
             }else if (userFriend.FriendId == userId)
             {
                 userGetDto = _mapper.Map<UserGetDto>(userFriend.User);
-                userGetDto.ProfileImage = userFriend.User?.ProfileImage?.ImageUrl;
-
             }
             userGetDtos.Add(userGetDto);
         }
@@ -154,13 +145,10 @@ public class FriendService : IFriendService
             if (userFriend.UserId == userId)
             {
                 userGetDto = _mapper.Map<UserGetDto>(userFriend.Friend);
-                userGetDto.ProfileImage = userFriend.Friend?.ProfileImage?.ImageUrl;
             }
             else if (userFriend.FriendId == userId)
             {
                 userGetDto = _mapper.Map<UserGetDto>(userFriend.User);
-                userGetDto.ProfileImage = userFriend.User?.ProfileImage?.ImageUrl;
-
             }
             userGetDtos.Add(userGetDto);
         }
