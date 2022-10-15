@@ -113,6 +113,11 @@ public class PostService : IPostService
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id);
         List<Image> images = await _unitOfWork.ImageRepository.GetAllAsync(n => n.Id, n => n.PostId == id);
         List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.Post == post);
+        List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == id);
+        foreach (var comment in comments)
+        {
+            await _unitOfWork.CommentRepository.DeleteAsync(comment);
+        }
         foreach (var notification in notifications)
         {
             await _unitOfWork.NotificationRepository.DeleteAsync(notification);
