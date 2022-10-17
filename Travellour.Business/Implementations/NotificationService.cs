@@ -34,6 +34,18 @@ public class NotificationService : INotificationService
         return notificationGetDtos;
     }
 
+    public async Task<List<NotificationGetDto>> GetPaginationNotificationAsync()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        List<Notification> notifications = await _unitOfWork.NotificationRepository.PaginationAsync(n => n.CreateDate, n => n.ReceiverId == userId,0, 3, "Sender.ProfileImage", "Post");
+        List<NotificationGetDto> notificationGetDtos = _mapper.Map<List<NotificationGetDto>>(notifications);
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            notificationGetDtos[i].FromCreateDate = notifications[i].CreateDate.GetTimeBetween();
+        }
+        return notificationGetDtos;
+    }
+
     public async Task CreateNotificationAsync(NotificationCreateDto notificationCreateDto)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -68,4 +80,6 @@ public class NotificationService : INotificationService
         notification.NotificationStatus = Core.Entities.Enum.NotificationStatus.Checked;
         await _unitOfWork.NotificationRepository.UpdateAsync(notification);
     }
+
+    
 }

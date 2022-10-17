@@ -33,7 +33,16 @@ public class Repository<TEntity> : IRepository<TEntity>
 
         return predicate is null
             ? await query.OrderByDescending(orderBy).ToListAsync()
-            : await query.OrderByDescending(orderBy).Where(predicate).ToListAsync();
+            : await query.Where(predicate).OrderByDescending(orderBy).ToListAsync();
+    }
+
+    public async Task<List<TEntity>> PaginationAsync<TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy, Expression<Func<TEntity, bool>>? predicate = null, int skip = 0, int take = int.MaxValue, params string[] includes)
+    {
+        var query = GetQuery(includes);
+
+        return predicate is null
+            ? await query.OrderByDescending(orderBy).Skip(skip).Take(take).ToListAsync()
+            : await query.Where(predicate).OrderByDescending(orderBy).Skip(skip).Take(take).ToListAsync();
     }
 
     public async Task CreateAsync(TEntity entity)
@@ -77,4 +86,6 @@ public class Repository<TEntity> : IRepository<TEntity>
         return query;
 #pragma warning restore CS8603 // Possible null reference return.
     }
+
+    
 }

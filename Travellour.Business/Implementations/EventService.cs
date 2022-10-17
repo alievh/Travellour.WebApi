@@ -147,4 +147,16 @@ public class EventService : IEventService
         }
         return eventGetDtos;
     }
+
+    public async Task DeleteEventAsync(int id)
+    {
+        Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "Images");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        foreach (var image in eventDb.Images)
+        {
+            await _unitOfWork.ImageRepository.DeleteAsync(image);
+        }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        await _unitOfWork.EventRepository.DeleteAsync(eventDb);
+    }
 }

@@ -9,6 +9,7 @@ public interface IFriendService
     Task FriendRemoveAsync(string? friendId);
     Task FriendRejectAsync(string? friendId);
     Task<List<UserGetDto>> GetFriendRequestAsync();
+    Task<List<UserGetDto>> GetPaginationFriendRequestAsync();
     Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync();
     Task<List<UserGetDto>> FriendGetAllAsync();
     Task CancelFriendRequestAsync(string? friendId);

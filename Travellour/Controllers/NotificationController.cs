@@ -31,6 +31,19 @@ public class NotificationController : Controller
         }
     }
 
+    [HttpGet("notificationPagination")]
+    public async Task<ActionResult> NotificationPaginationAsync()
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.NotificationService.GetPaginationNotificationAsync());
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
+
     [HttpPost("notificationCreate")]
     public async Task<ActionResult> NotificationCreateAsync(NotificationCreateDto notificationCreateDto)
     {

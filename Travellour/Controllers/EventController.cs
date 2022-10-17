@@ -99,5 +99,19 @@ namespace Travellour.Controllers
                 return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
             }
         }
+
+        [HttpPost("EventDelete/{id}")]
+        public async Task<ActionResult> EventDeleteAsync(int id)
+        {
+            try
+            {
+                await _unitOfWorkService.EventService.DeleteEventAsync(id);
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Event deleted succesfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+            }
+        }
     }
 }

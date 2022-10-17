@@ -81,6 +81,20 @@ public class FriendService : IFriendService
         return userGetDtos;
     }
 
+    public async Task<List<UserGetDto>> GetPaginationFriendRequestAsync()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.PaginationAsync(n => n.Id, n => n.FriendId == userId && n.Status == FriendRequestStatus.Pending,0, 3, "User.ProfileImage");
+        if (userFriends is null) throw new NullReferenceException();
+        List<UserGetDto> userGetDtos = new();
+        foreach (var userFriend in userFriends)
+        {
+            UserGetDto userGetDto = _mapper.Map<UserGetDto>(userFriend.User);
+            userGetDtos.Add(userGetDto);
+        }
+        return userGetDtos;
+    }
+
     public async Task<List<FriendSuggestionDto>> GetFriendSuggestionAsync()
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -135,7 +149,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())), "User.ProfileImage", "Friend.ProfileImage");
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted && n.Friend.UserName.ToLower().StartsWith(username.Trim().ToLower())), "User.ProfileImage", "Friend.ProfileImage");
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (userFriends is null) throw new NullReferenceException();
         List<UserGetDto> userGetDtos = new();
@@ -154,4 +168,6 @@ public class FriendService : IFriendService
         }
         return userGetDtos;
     }
+
+    
 }
