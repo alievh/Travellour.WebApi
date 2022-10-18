@@ -42,6 +42,12 @@ public class UserService : IUserService
         return userDto;
     }
 
+    public async Task<List<UserGetDto>> SearchUserAsync(string input)
+    {
+        List<AppUser> appUsers = await _unitOfWork.UserRepository.PaginationAsync(u => u.Id, u => u.UserName.ToLower().StartsWith(input.Trim().ToLower()), 0, 3, "ProfileImage");
+        List<UserGetDto> userDtos = _mapper.Map<List<UserGetDto>>(appUsers);
+        return userDtos;
+    }
 
     public async Task UpdateAsync(UserUpdateDto userUpdateDto)
     {
@@ -68,7 +74,6 @@ public class UserService : IUserService
 
         await _userManager.UpdateAsync(appUser);
     }
-    
 
     public async Task ChangeProfilePhotoAsync(ProfilePhotoDto profilePhotoDto)
     {

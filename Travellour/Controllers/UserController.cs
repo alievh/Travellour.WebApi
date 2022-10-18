@@ -101,4 +101,17 @@ public class UserController : Controller
             return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
         }
     }
+
+    [HttpGet("usersearch/{input}")]
+    public async Task<ActionResult<List<UserGetDto>>> UserSearchAsync(string input)
+    {
+        try
+        {
+            return Ok(await _unitOfWorkService.UserService.SearchUserAsync(input));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.ToString() });
+        }
+    }
 }
