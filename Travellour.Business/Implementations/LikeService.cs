@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -22,6 +23,7 @@ public class LikeService : ILikeService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Post post = await _unitOfWork.PostRepository.GetAsync(p => p.Id == id);
+        if (post == null) throw new NotFoundException("Post Not Found!");
 
         Like like = new()
         {
@@ -38,6 +40,7 @@ public class LikeService : ILikeService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         Like like = await _unitOfWork.LikeRepository.GetAsync(l => l.UserId == userId && l.PostId == id);
+        if (like == null) throw new NotFoundException("Like Not Found!");
         await _unitOfWork.LikeRepository.DeleteAsync(like);
     }
 }

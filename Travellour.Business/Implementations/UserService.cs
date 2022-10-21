@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.UserDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -33,18 +34,15 @@ public class UserService : IUserService
     public async Task<UserGetDto> GetAsync(string id)
     {
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "UserFriends");
-
-        if (appUser is null)
-        {
-            throw new NullReferenceException();
-        }
+        if (appUser is null) throw new NotFoundException("User Not Found!");
         UserGetDto userDto = _mapper.Map<UserGetDto>(appUser);
         return userDto;
     }
 
     public async Task<List<UserGetDto>> SearchUserAsync(string input)
     {
-        List<AppUser> appUsers = await _unitOfWork.UserRepository.PaginationAsync(u => u.Id, u => u.UserName.ToLower().StartsWith(input.Trim().ToLower()), 0, 3, "ProfileImage");
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        List<AppUser> appUsers = await _unitOfWork.UserRepository.PaginationAsync(u => u.Id, u => u.Id != userId && u.UserName.ToLower().StartsWith(input.Trim().ToLower()), 0, 3, "ProfileImage");
         List<UserGetDto> userDtos = _mapper.Map<List<UserGetDto>>(appUsers);
         return userDtos;
     }
@@ -53,7 +51,7 @@ public class UserService : IUserService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
-        if (appUser is null) throw new NullReferenceException();
+        if (appUser is null) throw new NotFoundException("User Not Found!");
         AppUser checkUsername = await _unitOfWork.UserRepository.GetAsync(u => u.UserName == userUpdateDto.Username);
         if (checkUsername is not null) throw new ArgumentException();
 
@@ -79,7 +77,7 @@ public class UserService : IUserService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage");
-        if (appUser is null) throw new NullReferenceException();
+        if (appUser is null) throw new NotFoundException("User Not Found!");
 #pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {
@@ -96,7 +94,7 @@ public class UserService : IUserService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage", "CoverImage");
-        if (appUser is null) throw new NullReferenceException();
+        if (appUser is null) throw new NotFoundException("User Not Found!");
 #pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {
@@ -113,6 +111,7 @@ public class UserService : IUserService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId, "ProfileImage", "CoverImage");
+        if (user is null) throw new NotFoundException("User Not Found!");
         if (!await _userManager.CheckPasswordAsync(user, passwordChangeDto.OldPassword)) throw new NullReferenceException();
         if (passwordChangeDto.NewPassword?.Trim() != passwordChangeDto.NewPasswordAgain?.Trim())
         {
@@ -126,6 +125,7 @@ public class UserService : IUserService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "Posts");
+        if (user is null) throw new NotFoundException("User Not Found!");
         UserProfileDto userProfileDto = _mapper.Map<UserProfileDto>(user);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(u => (u.UserId == id && u.FriendId == userId) || (u.FriendId == id && u.UserId == userId));
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(u => u.Id, u => (u.UserId == id && u.Status == FriendRequestStatus.Accepted) || (u.FriendId == id && u.Status == FriendRequestStatus.Accepted));

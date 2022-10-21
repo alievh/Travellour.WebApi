@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.EventDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -107,6 +108,7 @@ public class EventService : IEventService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "EventMembers");
+        if (eventDb is null) throw new NotFoundException("Event Not Found!");
         eventDb.EventMembers?.Add(appUser);
 
         await _unitOfWork.EventRepository.UpdateAsync(eventDb);
@@ -117,6 +119,7 @@ public class EventService : IEventService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "EventMembers");
+        if (eventDb is null) throw new NotFoundException("Event Not Found!");
         eventDb.EventMembers?.Remove(appUser);
 
         await _unitOfWork.EventRepository.UpdateAsync(eventDb);
@@ -151,6 +154,7 @@ public class EventService : IEventService
     public async Task DeleteEventAsync(int id)
     {
         Event eventDb = await _unitOfWork.EventRepository.GetAsync(n => n.Id == id, "Images");
+        if(eventDb is null) throw new NotFoundException("Event Not Found!");
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         foreach (var image in eventDb.Images)
         {

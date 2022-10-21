@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.PostDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -28,7 +29,7 @@ public class PostService : IPostService
     public async Task<PostGetDto> GetAsync(int id)
     {
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id, "User.ProfileImage", "Likes", "Comments", "Images");
-        if (post is null) throw new NullReferenceException();
+        if (post is null) throw new NotFoundException("Post Not Found!");
         PostGetDto postDto = _mapper.Map<PostGetDto>(post);
         postDto.Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == id, "User.ProfileImage");
         if (post.Images != null)
@@ -52,8 +53,15 @@ public class PostService : IPostService
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n=> n.Id, n => (n.UserId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (n.FriendId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
         foreach (var userFriend in userFriends)
         {
-            List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.UserId == userFriend.UserId || n.UserId == userFriend.FriendId, "User.ProfileImage", "Likes", "Comments", "Images");
-            allPosts.AddRange(posts);
+            if(userFriend.UserId == userId)
+            {
+                List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => (n.UserId == userFriend.UserId || n.UserId == userFriend.FriendId) && n.GroupId == null, "User.ProfileImage", "Likes", "Comments", "Images");
+                allPosts.AddRange(posts);
+            }else if (userFriend.FriendId == userId)
+            {
+                List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => (n.UserId == userFriend.UserId || n.UserId == userFriend.UserId) && n.GroupId == null, "User.ProfileImage", "Likes", "Comments", "Images");
+                allPosts.AddRange(posts);
+            }
         }
         AppUser user = await _unitOfWork.UserRepository.GetAsync(n => n.Id == userId, "JoinedGroups");
         if(user.JoinedGroups != null)
@@ -119,6 +127,7 @@ public class PostService : IPostService
     public async Task DeleteAsync(int id)
     {
         Post post = await _unitOfWork.PostRepository.GetAsync(n => n.Id == id);
+        if (post is null) throw new NotFoundException("Post Not Found!");
         List<Image> images = await _unitOfWork.ImageRepository.GetAllAsync(n => n.Id, n => n.PostId == id);
         List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.Post == post);
         List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == id);
@@ -141,7 +150,7 @@ public class PostService : IPostService
     public async Task<List<PostGetDto>> GetPostByUserIdAsync(string? id)
     {
         List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.UserId == id, "Images", "Likes", "User.ProfileImage", "Group");
-        if (posts is null) throw new NullReferenceException();
+        if (posts is null) throw new NotFoundException("Post Not Found!");
         List<PostGetDto> postDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
         {

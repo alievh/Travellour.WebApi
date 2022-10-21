@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "ZfqYo12sZTYgEuB+PLL4moy5IdC3bIahwP68069jXMhpHJJMHekD4bvcMDUKF8mbvG4GO+8HldBpRpTtE9PNaw==",
+  "dgSpecHash": "AvKDN2vE9NFhNNqYagtaWogchxKzg/49I9V3v0mkg1NuLig5FyMiJjdyvbxq2CPK4lTK8w18UfnGPIG8FfX/kA==",
   "success": true,
   "projectFilePath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour\\Travellour.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hsyna\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
+    "C:\\Users\\hsyna\\.nuget\\packages\\fluentvalidation\\11.2.0\\fluentvalidation.11.2.0.nupkg.sha512",
+    "C:\\Users\\hsyna\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.2.1\\fluentvalidation.aspnetcore.11.2.1.nupkg.sha512",
+    "C:\\Users\\hsyna\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.2.0\\fluentvalidation.dependencyinjectionextensions.11.2.0.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.8\\microsoft.aspnetcore.authentication.jwtbearer.6.0.8.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.8\\microsoft.aspnetcore.cryptography.internal.6.0.8.nupkg.sha512",

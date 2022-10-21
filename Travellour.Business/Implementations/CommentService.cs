@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Travellour.Business.DTOs.CommentDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -35,7 +36,7 @@ public class CommentService : ICommentService
     public async Task DeleteCommentAsync(int id)
     {
         Comment comment = await _unitOfWork.CommentRepository.GetAsync(u => u.Id == id);
-        if (comment == null) throw new NullReferenceException();
+        if (comment == null) throw new NotFoundException("Comment not found!");
         await _unitOfWork.CommentRepository.DeleteAsync(comment);
     }
 

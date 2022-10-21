@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Travellour.Business.DTOs.ForumDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -24,7 +25,7 @@ public class ForumService : IForumService
     public async Task<ForumGetDto> GetAsync(int id)
     {
         Forum forum = await _unitOfWork.ForumRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "User", "Likes", "Comments");
-        if (forum is null) throw new NullReferenceException();
+        if (forum is null) throw new NotFoundException("Forum Not Found!");
         ForumGetDto forumGetDto = _mapper.Map<ForumGetDto>(forum);
         List<Comment> comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.ForumId == id, "User.ProfileImage");
         forumGetDto.Comments = comments;

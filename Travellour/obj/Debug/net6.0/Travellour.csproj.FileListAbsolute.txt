@@ -78,3 +78,6 @@ C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Mi
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\hsyna\Documents\final-project\Travellour\Travellour\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

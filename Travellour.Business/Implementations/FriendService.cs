@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Travellour.Business.DTOs.UserDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -34,10 +35,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
-        if (user is null)
-        {
-            throw new NullReferenceException();
-        }
+        if (user is null) throw new NotFoundException("User Not Found!");
         AppUser userfriends = await _unitOfWork.UserRepository.GetAsync(u => u.Id == friendId);
         UserFriend userFriend = new()
         {
@@ -53,10 +51,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => (n.UserId == userId && n.FriendId == friendId) || (n.UserId == friendId && n.FriendId == userId));
-        if (userFriend is null)
-        {
-            throw new NullReferenceException();
-        }
+        if (userFriend is null) throw new NotFoundException("User Not Found!");
         await _unitOfWork.FriendRepository.DeleteAsync(userFriend);
     }
 
@@ -64,6 +59,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => n.FriendId == userId && n.UserId == friendId);
+        if (userFriend is null) throw new NotFoundException("User Not Found!");
         await _unitOfWork.FriendRepository.DeleteAsync(userFriend);
     }
 
@@ -71,7 +67,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => n.FriendId == userId && n.Status == FriendRequestStatus.Pending, "User.ProfileImage");
-        if (userFriends is null) throw new NullReferenceException();
+        if (userFriends is null) throw new NotFoundException("User Not Found!");
         List<UserGetDto> userGetDtos = new();
         foreach (var userFriend in userFriends)
         {
@@ -85,7 +81,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.PaginationAsync(n => n.Id, n => n.FriendId == userId && n.Status == FriendRequestStatus.Pending,0, 3, "User.ProfileImage");
-        if (userFriends is null) throw new NullReferenceException();
+        if (userFriends is null) throw new NotFoundException("User Not Found!");
         List<UserGetDto> userGetDtos = new();
         foreach (var userFriend in userFriends)
         {
@@ -99,7 +95,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<AppUser> users = await _unitOfWork.UserRepository.GetAllAsync(u => u.Id, u => u.Id != userId, "ProfileImage", "UserFriends");
-        if (users is null) throw new NullReferenceException();
+        if (users is null) throw new NotFoundException("User Not Found!");
         List<AppUser> notFriends = new();
         foreach (var user in users)
         {
@@ -117,7 +113,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted), "User.ProfileImage", "Friend.ProfileImage");
-        if (userFriends is null) throw new NullReferenceException();
+        if (userFriends is null) throw new NotFoundException("User Not Found!");
         List<UserGetDto> userGetDtos = new();
         foreach (var userFriend in userFriends)
         {
@@ -138,10 +134,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         UserFriend userFriend = await _unitOfWork.FriendRepository.GetAsync(n => (n.UserId == userId && n.Status == FriendRequestStatus.Pending) || (n.FriendId == friendId && n.Status == FriendRequestStatus.Pending));
-        if (userFriend is null)
-        {
-            throw new NullReferenceException();
-        }
+        if (userFriend is null) throw new NotFoundException("User Not Found!");
         await _unitOfWork.FriendRepository.DeleteAsync(userFriend);
     }
 

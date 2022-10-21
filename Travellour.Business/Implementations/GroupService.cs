@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Travellour.Business.DTOs.GroupDTO;
 using Travellour.Business.DTOs.PostDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -29,7 +30,7 @@ public class GroupService : IGroupService
     public async Task<GroupGetDto> GetAsync(int id)
     {
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin", "GroupMembers", "ProfileImage", "CoverImage");
-        if (group is null) throw new NullReferenceException();
+        if (group is null) throw new NotFoundException("Group Not Found!");
         GroupGetDto groupGetDto = _mapper.Map<GroupGetDto>(group);
         return groupGetDto;
     }
@@ -37,7 +38,7 @@ public class GroupService : IGroupService
     public async Task<List<GroupGetDto>> GetAllAsyn()
     {
         List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => !n.IsDeleted, "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
-        if (groups is null) throw new NullReferenceException();
+        if (groups is null) throw new NotFoundException("Group Not Found!");
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
         return groupGetDtos;
     }
@@ -45,7 +46,7 @@ public class GroupService : IGroupService
     public async Task<List<GroupGetDto>> GetMyGroupsAsync(string id)
     {
         List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupAdminId == id, "ProfileImage");
-        if (groups is null) throw new NullReferenceException();
+        if (groups is null) throw new NotFoundException("Group Not Found!");
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
         return groupGetDtos;
     }
@@ -64,6 +65,7 @@ public class GroupService : IGroupService
     public async Task ChangeGroupAsync(GroupUpdateDto groupUpdateDto)
     {
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == groupUpdateDto.Id);
+        if (group is null) throw new NotFoundException("Group Not Found!");
         if (groupUpdateDto.GroupName?.Trim() == "" && groupUpdateDto.GroupDescription?.Trim() == "") throw new NullReferenceException();
         if(groupUpdateDto.GroupName != null && groupUpdateDto.GroupName.Trim() != "")
         {
@@ -79,7 +81,7 @@ public class GroupService : IGroupService
     public async Task<GroupProfileDto> GetGroupProfileAsync(int id)
     {
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id && !n.IsDeleted, "GroupAdmin.ProfileImage", "GroupMembers", "ProfileImage", "CoverImage", "GroupPosts");
-        if (group is null) throw new NullReferenceException();
+        if (group is null) throw new NotFoundException("Group Not Found!");
         GroupProfileDto groupProfileDto = _mapper.Map<GroupProfileDto>(group);
         return groupProfileDto;
     }
@@ -87,7 +89,7 @@ public class GroupService : IGroupService
     public async Task<List<PostGetDto>> GetAllGroupPostAsync(int id)
     {
         List<Post> posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == id, "Group", "User.ProfileImage", "Images", "Likes", "Comments");
-        if (posts is null) throw new NullReferenceException();
+        if (posts is null) throw new NotFoundException("Posts Not Found!");
         List<PostGetDto> postGetDtos = _mapper.Map<List<PostGetDto>>(posts);
         for (int i = 0; i < posts.Count; i++)
         {
@@ -103,11 +105,8 @@ public class GroupService : IGroupService
                 }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 postGetDtos[i].ImageUrls = imageUrls;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                postGetDtos[i].LikeCount = posts[i].Likes.Count;
-                postGetDtos[i].CommentCount = posts[i].Comments.Count;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
+            posts[i].Comments = await _unitOfWork.CommentRepository.GetAllAsync(n => n.CreateDate, n => n.PostId == posts[i].Id, "User.ProfileImage");
         }
         return postGetDtos;
     }
@@ -117,7 +116,7 @@ public class GroupService : IGroupService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == id, "GroupMembers");
-        if (group == null) throw new NullReferenceException();
+        if (group == null) throw new NotFoundException("Group Not Found!");
         group.GroupMembers?.Add(appUser);
         await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
@@ -127,7 +126,7 @@ public class GroupService : IGroupService
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
         Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == id, "GroupMembers");
-        if (group == null) throw new NullReferenceException();
+        if (group == null) throw new NotFoundException("Group Not Found!");
         group.GroupMembers?.Remove(appUser);
         await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
@@ -135,9 +134,9 @@ public class GroupService : IGroupService
     public async Task KickUserFromGroupAsync(string userId, int groupId)
     {
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
-        if (appUser is null) throw new NullReferenceException();
+        if (appUser == null) throw new NotFoundException("User Not Found!");
         Group group = await _unitOfWork.GroupRepository.GetAsync(u => u.Id == groupId, "GroupMembers");
-        if (group is null) throw new NullReferenceException();
+        if (group == null) throw new NotFoundException("Group Not Found!");
         group.GroupMembers?.Remove(appUser);
         await _unitOfWork.GroupRepository.UpdateAsync(group);
     }
@@ -145,6 +144,7 @@ public class GroupService : IGroupService
     public async Task ChangeGroupPhotoAsync(int id, GroupPhotoDto groupPhotoDto)
     {
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id, "ProfileImage");
+        if (group == null) throw new NotFoundException("Group Not Found!");
 #pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {
@@ -160,7 +160,7 @@ public class GroupService : IGroupService
     public async Task ChangeGroupCoverAsync(int id, GroupCoverDto groupCoverDto)
     {
         Group group = await _unitOfWork.GroupRepository.GetAsync(n => n.Id == id, "CoverImage");
-
+        if (group == null) throw new NotFoundException("Group Not Found!");
 #pragma warning disable CS8604 // Possible null reference argument.
         var image = new Image
         {

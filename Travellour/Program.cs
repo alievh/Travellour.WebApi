@@ -1,14 +1,26 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Travellour.Business.DTOs.AuthenticationDTO;
+using Travellour.Business.DTOs.EventDTO;
+using Travellour.Business.DTOs.ForumDTO;
+using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.Implementations;
 using Travellour.Business.Interfaces;
 using Travellour.Business.Profiles;
 using Travellour.Business.Token.Implementations;
 using Travellour.Business.Token.Interfaces;
+using Travellour.Business.Validator.Authentication;
+using Travellour.Business.Validator.Event;
+using Travellour.Business.Validator.Forum;
+using Travellour.Business.Validator.Group;
+using Travellour.Business.Validator.Post;
 using Travellour.Core;
 using Travellour.Core.Entities;
 using Travellour.Data;
@@ -55,6 +67,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
+#pragma warning disable CS0618 // Type or member is obsolete
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(fl => fl.RegisterValidatorsFromAssemblyContaining<Program>());
+#pragma warning restore CS0618 // Type or member is obsolete
+builder.Services.AddTransient<IValidator<Register>, RegisterValidator>();
+builder.Services.AddTransient<IValidator<Login>, LoginValidator>();
+builder.Services.AddTransient<IValidator<PostCreateDto>, PostCreateValidator>();
+builder.Services.AddTransient<IValidator<GroupCreateDto>, GroupCreateValidator>();
+builder.Services.AddTransient<IValidator<EventCreateDto>, EventCreateValidator>();
+builder.Services.AddTransient<IValidator<ForumCreateDto>, ForumCreateValidator>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

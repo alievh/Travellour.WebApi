@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Travellour.Business.DTOs.NotificationDTO;
+using Travellour.Business.Exceptions;
 using Travellour.Business.Helpers;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
@@ -26,6 +27,7 @@ public class NotificationService : INotificationService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<Notification> notifications = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.ReceiverId == userId, "Sender.ProfileImage", "Post");
+        if (notifications is null) throw new NotFoundException("Notification Not Found!");
         List<NotificationGetDto> notificationGetDtos = _mapper.Map<List<NotificationGetDto>>(notifications);
         for (int i = 0; i < notifications.Count; i++)
         {
@@ -38,6 +40,7 @@ public class NotificationService : INotificationService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         List<Notification> notifications = await _unitOfWork.NotificationRepository.PaginationAsync(n => n.CreateDate, n => n.ReceiverId == userId,0, 3, "Sender.ProfileImage", "Post");
+        if (notifications is null) throw new NotFoundException("Notification Not Found!");
         List<NotificationGetDto> notificationGetDtos = _mapper.Map<List<NotificationGetDto>>(notifications);
         for (int i = 0; i < notifications.Count; i++)
         {
@@ -77,6 +80,7 @@ public class NotificationService : INotificationService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         Notification notification = await _unitOfWork.NotificationRepository.GetAsync(n => n.ReceiverId == userId && n.Id == id);
+        if (notification is null) throw new NotFoundException("Notification Not Found!");
         notification.NotificationStatus = Core.Entities.Enum.NotificationStatus.Checked;
         await _unitOfWork.NotificationRepository.UpdateAsync(notification);
     }
