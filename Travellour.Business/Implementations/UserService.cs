@@ -34,8 +34,10 @@ public class UserService : IUserService
     public async Task<UserGetDto> GetAsync(string id)
     {
         AppUser appUser = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id, "ProfileImage", "CoverImage", "UserFriends");
+        List<Notification> notif = await _unitOfWork.NotificationRepository.GetAllAsync(n => n.CreateDate, n => n.ReceiverId == appUser.Id && n.NotificationStatus == NotificationStatus.UnChecked);
         if (appUser is null) throw new NotFoundException("User Not Found!");
         UserGetDto userDto = _mapper.Map<UserGetDto>(appUser);
+        userDto.NotificationCount = notif.Count;
         return userDto;
     }
 

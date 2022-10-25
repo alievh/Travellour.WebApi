@@ -67,17 +67,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
-#pragma warning disable CS0618 // Type or member is obsolete
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                .AddFluentValidation(fl => fl.RegisterValidatorsFromAssemblyContaining<Program>());
-#pragma warning restore CS0618 // Type or member is obsolete
-builder.Services.AddTransient<IValidator<Register>, RegisterValidator>();
-builder.Services.AddTransient<IValidator<Login>, LoginValidator>();
-builder.Services.AddTransient<IValidator<PostCreateDto>, PostCreateValidator>();
-builder.Services.AddTransient<IValidator<GroupCreateDto>, GroupCreateValidator>();
-builder.Services.AddTransient<IValidator<EventCreateDto>, EventCreateValidator>();
-builder.Services.AddTransient<IValidator<ForumCreateDto>, ForumCreateValidator>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -96,6 +85,18 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = true;
 });
+
+#pragma warning disable CS0618 // Type or member is obsolete
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(fl => fl.RegisterValidatorsFromAssemblyContaining<Program>());
+#pragma warning restore CS0618 // Type or member is obsolete
+builder.Services.AddTransient<IValidator<Register>, RegisterValidator>();
+builder.Services.AddTransient<IValidator<Login>, LoginValidator>();
+builder.Services.AddTransient<IValidator<PostCreateDto>, PostCreateValidator>();
+builder.Services.AddTransient<IValidator<GroupCreateDto>, GroupCreateValidator>();
+builder.Services.AddTransient<IValidator<EventCreateDto>, EventCreateValidator>();
+builder.Services.AddTransient<IValidator<ForumCreateDto>, ForumCreateValidator>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddMapperService();
