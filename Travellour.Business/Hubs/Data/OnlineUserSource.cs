@@ -1,4 +1,4 @@
-﻿namespace Travellour.Hubs.Data
+﻿namespace Travellour.Business.Hubs.Data
 {
     public static class OnlineUserSource
     {

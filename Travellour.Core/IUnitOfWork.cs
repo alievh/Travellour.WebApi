@@ -14,5 +14,6 @@ public interface IUnitOfWork
     ILikeRepository LikeRepository { get; }
     INotificationRepository NotificationRepository { get; }
     IPostRepository PostRepository { get; }
+    IMessageRepository MessageRepository { get; }
     Task SaveAsync();
 }

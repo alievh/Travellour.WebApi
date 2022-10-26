@@ -18,6 +18,7 @@ public class UnitOfWork : IUnitOfWork
     private ILikeRepository _likeRepository;
     private INotificationRepository _notificationRepository;
     private IPostRepository _postRepository;
+    private IMessageRepository _messageRepository;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public UnitOfWork(AppDbContext context)
@@ -44,6 +45,7 @@ public class UnitOfWork : IUnitOfWork
     public INotificationRepository NotificationRepository => _notificationRepository ??= new NotificationRepository(_context);
 
     public IPostRepository PostRepository => _postRepository ??= new PostRepository(_context);
+    public IMessageRepository MessageRepository => _messageRepository ??= new MessageRepository(_context);
     public async Task SaveAsync()
     {
         await _context.SaveChangesAsync();

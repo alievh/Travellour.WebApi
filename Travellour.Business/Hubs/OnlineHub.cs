@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Travellour.Business.DTOs.AuthenticationDTO;
-using Travellour.Hubs.Data;
+using Travellour.Business.Hubs.Data;
 
-namespace Travellour.Hubs
+namespace Travellour.Business.Hubs
 {
     public class OnlineHub : Hub
     {

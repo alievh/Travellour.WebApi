@@ -52,11 +52,7 @@ public class PostService : IPostService
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n=> n.Id, n => (n.UserId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (n.FriendId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
         var userIds = userFriends.Select(x => x.UserId);
         var friendIds = userFriends.Select(x => x.FriendId);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8604 // Possible null reference argument.
         var posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == null && (friendIds.Contains(n.UserId) || userIds.Contains(n.UserId)), "User.ProfileImage", "Likes", "Comments", "Images");
-#pragma warning restore CS8604 // Possible null reference argument.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         AppUser user = await _unitOfWork.UserRepository.GetAsync(n => n.Id == userId, "JoinedGroups");
         if(user.JoinedGroups != null)
         {

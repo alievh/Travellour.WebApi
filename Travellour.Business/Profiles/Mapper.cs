@@ -3,6 +3,7 @@ using Travellour.Business.DTOs.CommentDTO;
 using Travellour.Business.DTOs.EventDTO;
 using Travellour.Business.DTOs.ForumDTO;
 using Travellour.Business.DTOs.GroupDTO;
+using Travellour.Business.DTOs.MessageDTO;
 using Travellour.Business.DTOs.NotificationDTO;
 using Travellour.Business.DTOs.PostDTO;
 using Travellour.Business.DTOs.UserDTO;
@@ -53,6 +54,8 @@ public class Mapper : Profile
         CreateMap<Comment, CommentGetDto>();
         CreateMap<NotificationCreateDto, Notification>();
         CreateMap<Notification, NotificationGetDto>();
+        CreateMap<MessageDto, Message>();
+        CreateMap<Message, GetMessage>();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }

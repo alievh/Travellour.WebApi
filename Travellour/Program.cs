@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ using Travellour.Business.DTOs.EventDTO;
 using Travellour.Business.DTOs.ForumDTO;
 using Travellour.Business.DTOs.GroupDTO;
 using Travellour.Business.DTOs.PostDTO;
+using Travellour.Business.Hubs;
 using Travellour.Business.Implementations;
 using Travellour.Business.Interfaces;
 using Travellour.Business.Profiles;
@@ -25,7 +27,6 @@ using Travellour.Core;
 using Travellour.Core.Entities;
 using Travellour.Data;
 using Travellour.Data.DAL;
-using Travellour.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +46,6 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowOrigins",
         builder => builder.WithOrigins("http://localhost:3000").WithMethods("PUT", "DELETE", "GET"));
 });
-
-builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -104,6 +103,9 @@ builder.Services.AddMapperService();
 builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddTransient<Hub<IChatClient>, ChatHub>();
+builder.Services.AddSignalR();
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
 
@@ -144,6 +146,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<OnlineHub>("/onlinehub");
+    endpoints.MapHub<ChatHub>("/chathub");
 });
 
 app.MapControllers();

@@ -11,7 +11,7 @@ namespace Travellour.Data.Implementations;
 
 public class NotificationRepository : Repository<Notification>, INotificationRepository
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext? _context;
     public NotificationRepository(AppDbContext context) : base(context)
     {
         _context = context;

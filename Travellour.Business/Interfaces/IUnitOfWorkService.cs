@@ -1,4 +1,6 @@
-﻿namespace Travellour.Business.Interfaces;
+﻿using ChatApp.Business.Services.Interfaces;
+
+namespace Travellour.Business.Interfaces;
 
 public interface IUnitOfWorkService
 {
@@ -12,4 +14,5 @@ public interface IUnitOfWorkService
     INotificationService NotificationService { get; }
     IPostService PostService { get; }
     IUserService UserService { get; }
+    IMessageService MessageService { get; }
 }

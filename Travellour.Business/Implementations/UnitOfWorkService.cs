@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using ChatApp.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using Travellour.Business.Hubs;
 using Travellour.Business.Interfaces;
 using Travellour.Core;
 using Travellour.Core.Entities;
@@ -21,20 +24,23 @@ public class UnitOfWorkService : IUnitOfWorkService
     private INotificationService _notificationService;
     private IPostService _postService;
     private IGroupService _groupService;
+    private IMessageService _messageService;
 
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
 
-    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment, UserManager<AppUser> userManager)
+    public UnitOfWorkService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment, UserManager<AppUser> userManager, IHubContext<ChatHub, IChatClient> hubContext)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
         _hostEnvironment = hostEnvironment;
         _userManager = userManager;
+        _hubContext = hubContext;
     }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -57,4 +63,5 @@ public class UnitOfWorkService : IUnitOfWorkService
     public IPostService PostService => _postService ??= new PostService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
 
     public IEventService EventService => _eventService ??= new EventService(_unitOfWork, _mapper, _httpContextAccessor, _hostEnvironment);
+    public IMessageService MessageService => _messageService ??= new MessageService(_unitOfWork, _mapper, _httpContextAccessor, _hubContext);
 }

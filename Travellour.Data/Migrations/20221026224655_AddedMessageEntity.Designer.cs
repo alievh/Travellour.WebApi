@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Travellour.Data.DAL;
 
@@ -11,9 +12,10 @@ using Travellour.Data.DAL;
 namespace Travellour.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221026224655_AddedMessageEntity")]
+    partial class AddedMessageEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,38 +499,6 @@ namespace Travellour.Data.Migrations
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("Travellour.Core.Entities.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SendUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SenderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SendUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("Travellour.Core.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -832,21 +802,6 @@ namespace Travellour.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Travellour.Core.Entities.Message", b =>
-                {
-                    b.HasOne("Travellour.Core.Entities.AppUser", "SendUser")
-                        .WithMany()
-                        .HasForeignKey("SendUserId");
-
-                    b.HasOne("Travellour.Core.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("SendUser");
 
                     b.Navigation("User");
                 });
