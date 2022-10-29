@@ -2,6 +2,7 @@
 using ChatApp.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using System.Globalization;
 using System.Security.Claims;
 using Travellour.Business.DTOs.MessageDTO;
 using Travellour.Business.DTOs.UserDTO;
@@ -36,7 +37,7 @@ namespace Travellour.Business.Implementations
             GetMessage getMessage = new()
             {
                 Content = message.Content,
-                SenderDate = System.DateTime.Now,
+                SenderDate = DateTime.UtcNow.AddHours(4).ToString("hh:mm tt", CultureInfo.InvariantCulture),
                 SendUser = _mapper.Map<UserGetDto>(sendUser),
             };
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -48,15 +49,15 @@ namespace Travellour.Business.Implementations
             await _unitOfWork.SaveAsync();
             return getMessage;
         }
-        public async Task<List<GetMessage>> GetMessages(string username)
+        public async Task<List<GetMessage>> GetMessages(string id)
         {
-            AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.UserName == username);
+            AppUser user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == id);
             if (user is null)
             {
                 throw new NotFoundException("User is not defined");
             }
             var loginUserId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<Message> messagesDb = await _unitOfWork.MessageRepository.GetAllAsync(m => m.SenderDate, m => (m.SendUserId == loginUserId && m.UserId == user.Id) || (m.SendUserId == user.Id && m.UserId == loginUserId), "SendUser");
+            List<Message> messagesDb = await _unitOfWork.MessageRepository.GetAllAsync(m => m.SenderDate, m => (m.SendUserId == loginUserId && m.UserId == user.Id) || (m.SendUserId == user.Id && m.UserId == loginUserId), "SendUser", "User.ProfileImage");
             return _mapper.Map<List<GetMessage>>(messagesDb);
         }
     }

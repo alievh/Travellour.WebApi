@@ -31,7 +31,9 @@ namespace Travellour.Business.Hubs
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8604 // Possible null reference argument.
         }
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         public override async Task OnDisconnectedAsync(Exception exception)
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var name = Context.User.Identity.Name;

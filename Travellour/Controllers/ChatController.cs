@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Travellour.Business.DTOs.MessageDTO;
 using Travellour.Business.DTOs.StatusCode;
 using Travellour.Business.Interfaces;
 
 namespace Travellour.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class ChatController : Controller
@@ -14,7 +16,7 @@ namespace Travellour.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        [HttpPost]
+        [HttpPost("messageSend")]
         public async Task<ActionResult<GetMessage>> SendMessage(MessageDto message)
         {
             try
@@ -26,12 +28,12 @@ namespace Travellour.Controllers
                 return StatusCode(StatusCodes.Status502BadGateway, new Response { Status = "Error", Message = ex.Message });
             }
         }
-        [HttpGet("{username}")]
-        public async Task<ActionResult<List<MessageDto>>> GetMessages(string username)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<MessageDto>>> GetMessages(string id)
         {
             try
             {
-                return Ok(await _unitOfWork.MessageService.GetMessages(username));
+                return Ok(await _unitOfWork.MessageService.GetMessages(id));
             }
             catch (Exception ex)
             {

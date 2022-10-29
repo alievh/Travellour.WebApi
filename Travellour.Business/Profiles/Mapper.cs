@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Globalization;
 using Travellour.Business.DTOs.CommentDTO;
 using Travellour.Business.DTOs.EventDTO;
 using Travellour.Business.DTOs.ForumDTO;
@@ -55,7 +56,8 @@ public class Mapper : Profile
         CreateMap<NotificationCreateDto, Notification>();
         CreateMap<Notification, NotificationGetDto>();
         CreateMap<MessageDto, Message>();
-        CreateMap<Message, GetMessage>();
+        CreateMap<Message, GetMessage>()
+            .ForMember(c => c.SenderDate, c=> c.MapFrom(src => src.SenderDate.ToString("hh:mm tt", CultureInfo.InvariantCulture)));
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 }

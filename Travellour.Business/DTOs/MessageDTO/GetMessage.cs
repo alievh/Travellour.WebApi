@@ -6,7 +6,8 @@ namespace Travellour.Business.DTOs.MessageDTO
     {
         public int Id { get; set; }
         public string? Content { get; set; }
-        public DateTime SenderDate { get; set; }
+        public string? SenderDate { get; set; }
         public UserGetDto? SendUser { get; set; }
+        public UserGetDto? User { get; set; }
     }
 }
