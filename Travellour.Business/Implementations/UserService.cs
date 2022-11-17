@@ -44,7 +44,7 @@ public class UserService : IUserService
     public async Task<List<UserGetDto>> SearchUserAsync(string input)
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        List<AppUser> appUsers = await _unitOfWork.UserRepository.PaginationAsync(u => u.Id, u => u.Id != userId && u.UserName.ToLower().StartsWith(input.Trim().ToLower()), 0, 3, "ProfileImage");
+        List<AppUser> appUsers = await _unitOfWork.UserRepository.PaginationAsync(u => u.Id, u => u.Id != userId && u.UserName.ToLower().Contains(input.Trim().ToLower()), 0, 3, "ProfileImage");
         List<UserGetDto> userDtos = _mapper.Map<List<UserGetDto>>(appUsers);
         return userDtos;
     }

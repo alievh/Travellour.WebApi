@@ -52,13 +52,13 @@ public class PostService : IPostService
         List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n=> n.Id, n => (n.UserId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted) || (n.FriendId == userId && n.Status == Core.Entities.Enum.FriendRequestStatus.Accepted));
         var userIds = userFriends.Select(x => x.UserId);
         var friendIds = userFriends.Select(x => x.FriendId);
-        var posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == null && (friendIds.Contains(n.UserId) || userIds.Contains(n.UserId)), "User.ProfileImage", "Likes", "Comments", "Images");
+        var posts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == null && (friendIds.Contains(n.UserId) || userIds.Contains(n.UserId)), "User.ProfileImage", "Likes", "Comments", "Images", "Group");
         AppUser user = await _unitOfWork.UserRepository.GetAsync(n => n.Id == userId, "JoinedGroups");
         if(user.JoinedGroups != null)
         {
             foreach (var group in user.JoinedGroups)
             {
-                List<Post> groupPosts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == group.Id, "User.ProfileImage", "Likes", "Comments", "Images");
+                List<Post> groupPosts = await _unitOfWork.PostRepository.GetAllAsync(n => n.CreateDate, n => n.GroupId == group.Id, "User.ProfileImage", "Likes", "Comments", "Images", "Group");
                 posts.AddRange(groupPosts);
             }
         }

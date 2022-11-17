@@ -142,7 +142,7 @@ public class FriendService : IFriendService
     {
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().StartsWith(username.Trim().ToLower())) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted && n.Friend.UserName.ToLower().StartsWith(username.Trim().ToLower())), "User.ProfileImage", "Friend.ProfileImage");
+        List<UserFriend> userFriends = await _unitOfWork.FriendRepository.GetAllAsync(n => n.Id, n => (n.FriendId == userId && n.Status == FriendRequestStatus.Accepted && n.User.UserName.ToLower().Contains(username.Trim().ToLower())) || (n.UserId == userId && n.Status == FriendRequestStatus.Accepted && n.Friend.UserName.ToLower().Contains(username.Trim().ToLower())), "User.ProfileImage", "Friend.ProfileImage");
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (userFriends is null) throw new NullReferenceException();
         List<UserGetDto> userGetDtos = new();

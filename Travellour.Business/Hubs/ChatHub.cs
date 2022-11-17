@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Travellour.Core.Entities;
 
@@ -10,8 +9,7 @@ namespace Travellour.Business.Hubs
         private static readonly List<AppUser> _clients = new();
         private readonly Travellour.Data.DAL.AppDbContext _context;
         public ChatHub(
-            Travellour.Data.DAL.AppDbContext context,
-            IHttpContextAccessor httpContext)
+            Travellour.Data.DAL.AppDbContext context)
         {
             _context = context;
         }

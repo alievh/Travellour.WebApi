@@ -128,7 +128,7 @@ public class EventService : IEventService
     public async Task<List<EventGetDto>> SearchEventByName(string eventName)
     {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => n.EventTitle.ToLower().StartsWith(eventName.Trim().ToLower()), "Images", "EventMembers");
+        List<Event> events = await _unitOfWork.EventRepository.GetAllAsync(n => n.CreateDate, n => n.EventTitle.ToLower().Contains(eventName.Trim().ToLower()), "Images", "EventMembers");
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (events is null) throw new NullReferenceException();
         List<EventGetDto> eventGetDtos = _mapper.Map<List<EventGetDto>>(events);

@@ -176,7 +176,7 @@ public class GroupService : IGroupService
     public async Task<List<GroupGetDto>> SearchGroupByName(string groupName)
     {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupName.ToLower().StartsWith(groupName.Trim().ToLower()) , "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
+        List<Group> groups = await _unitOfWork.GroupRepository.GetAllAsync(n => n.CreateDate, n => n.GroupName.ToLower().Contains(groupName.Trim().ToLower()) , "GroupAdmin", "GroupMembers.ProfileImage", "ProfileImage", "CoverImage");
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         if (groups is null) throw new NullReferenceException();
         List<GroupGetDto> groupGetDtos = _mapper.Map<List<GroupGetDto>>(groups);
