@@ -1,4 +1,4 @@
-﻿using Travellour.Core.Entities.Base;
+﻿ using Travellour.Core.Entities.Base;
 
 namespace Travellour.Core.Entities;
 
