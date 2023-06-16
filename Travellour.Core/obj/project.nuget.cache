@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8n9SoEQ6qHez3awSdvDB00wV43RE6+ipSif/wW2sEsM2RmjbzfJZy7+paTzKdAIoyJvb+ETd6vSNfuhWUdhEKQ==",
+  "dgSpecHash": "v3ZC0Ju7Jky6jDavyxOalfYy9H9sAiczvD1dxcGRcLIwD3y1oQ2c0XxioJxK02ZgPtE5PEmM1h4aynREPwrLxw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj",
+  "projectFilePath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hsyna\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.8\\microsoft.aspnetcore.cryptography.internal.6.0.8.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.8\\microsoft.aspnetcore.cryptography.keyderivation.6.0.8.nupkg.sha512",

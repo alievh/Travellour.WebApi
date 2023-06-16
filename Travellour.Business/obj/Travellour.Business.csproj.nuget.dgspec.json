@@ -1,18 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\Travellour.Business.csproj": {}
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\Travellour.Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\Travellour.Business.csproj": {
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\Travellour.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\Travellour.Business.csproj",
+        "projectUniqueName": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\Travellour.Business.csproj",
         "projectName": "Travellour.Business",
-        "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\Travellour.Business.csproj",
+        "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\Travellour.Business.csproj",
         "packagesPath": "C:\\Users\\hsyna\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\obj\\",
+        "outputPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\hsyna\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -28,11 +31,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {
-                "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj"
+              "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj": {
+                "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj"
               },
-              "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj": {
-                "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj"
+              "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj": {
+                "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj"
               }
             }
           }
@@ -66,7 +69,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -75,19 +79,22 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj",
+        "projectUniqueName": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj",
         "projectName": "Travellour.Core",
-        "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj",
+        "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj",
         "packagesPath": "C:\\Users\\hsyna\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\obj\\",
+        "outputPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\hsyna\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -130,7 +137,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -139,19 +147,22 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj": {
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj",
+        "projectUniqueName": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj",
         "projectName": "Travellour.Data",
-        "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj",
+        "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj",
         "packagesPath": "C:\\Users\\hsyna\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\obj\\",
+        "outputPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\hsyna\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -167,8 +178,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {
-                "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj"
+              "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj": {
+                "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj"
               }
             }
           }
@@ -208,7 +219,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -217,7 +229,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bK5CB3o2raaZwJ2co5UIGFwOZhZ2vJOeDsOY8dikGZJXrKlW0Xj+f37dcLNpLcjcNxlZX15hmxML2Fx3UJu+Ig==",
+  "dgSpecHash": "Pc8DQ4YUg2EJPKmzFpWPAWh6eha/UdhP0O7y7wnPp6Ks/Aoxr1/zJ6qjpMGQURDR68nUNhe/MdSQwoor1w00GQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Data\\Travellour.Data.csproj",
+  "projectFilePath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Data\\Travellour.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hsyna\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.8\\microsoft.aspnetcore.cryptography.internal.6.0.8.nupkg.sha512",

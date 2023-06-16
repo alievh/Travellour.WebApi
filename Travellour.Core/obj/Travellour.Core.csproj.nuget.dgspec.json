@@ -1,18 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {}
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj": {
+    "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj",
+        "projectUniqueName": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj",
         "projectName": "Travellour.Core",
-        "projectPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\Travellour.Core.csproj",
+        "projectPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\Travellour.Core.csproj",
         "packagesPath": "C:\\Users\\hsyna\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Core\\obj\\",
+        "outputPath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\hsyna\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -55,7 +58,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -64,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }

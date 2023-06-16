@@ -20,12 +20,12 @@ public class UnitOfWork : IUnitOfWork
     private IPostRepository _postRepository;
     private IMessageRepository _messageRepository;
 
-    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
     }
-    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
     public IEventRepository EventRepository => _eventRepository ??= new EventRepository(_context);

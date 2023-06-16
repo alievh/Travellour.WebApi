@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qyHcMq2sEnfJUn8W4FOpnXyxf3dAbw5TAtpoNmvcW3nIaQ31GqurI3Zo/Y0x8RcupYbh+eSMvYN3z3AGNs2O3g==",
+  "dgSpecHash": "lFn3EqqckdK0t85TPKORX5+mWMDHeEk7Kd/xdH4OBpHWKS7sOw6MyezikWLBoKnssSbIIU28SxzSusJK33nHNg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\hsyna\\Documents\\final-project\\Travellour\\Travellour.Business\\Travellour.Business.csproj",
+  "projectFilePath": "D:\\Projects\\Travellour-final\\Travellour.WebApi\\Travellour.Business\\Travellour.Business.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hsyna\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\hsyna\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
