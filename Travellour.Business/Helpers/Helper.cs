@@ -8,7 +8,6 @@ public static class Helper
     {
         string fileNewName = FileGuidName(file);
         string rootInFolder = folders.Aggregate((result, folder) => Path.Combine(result, folder));
-        if (!File.Exists(rootInFolder)) File.Create(rootInFolder);
         string path = Path.Combine(root, rootInFolder, fileNewName);
         using (FileStream fs = new(path, FileMode.Create))
         {
