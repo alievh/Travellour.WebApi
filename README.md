@@ -4,7 +4,7 @@
 
 Travellour is a social media platform designed for travel enthusiasts. This project was developed as the final project for my CodeAcademy course. It aims to connect travelers, allowing them to find friends, create and join events, and participate in travel-focused groups.
 
-🌟 ## **Features**
+## 🌟 **Features**
 
 Event Management: Create and join travel-related events.
 
@@ -14,7 +14,7 @@ Group Creation: Build or join groups with shared travel interests.
 
 Social Interaction: Engage with like-minded travelers in a vibrant community.
 
-🛠 Technologies Used
+## 🛠 **Technologies Used**
 
 ## **Frontend**
 
